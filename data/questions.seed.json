@@ -1,0 +1,652 @@
+[
+  {
+    "id": "q001",
+    "stem": "A 52-year-old female presents for her annual exam. She has no significant medical history. Her BMI is 26, BP 122/78. Fasting glucose is 108 mg/dL. Which screening is most appropriate to recommend at this visit?",
+    "choices": ["A. Colonoscopy", "B. Bone density scan (DEXA)", "C. Mammogram", "D. Hemoglobin A1C"],
+    "answer": 2,
+    "rationale": "The USPSTF recommends biennial screening mammography for women aged 50-74. While colonoscopy is recommended starting at age 45, the question asks what is MOST appropriate at this visit. Her fasting glucose of 108 is mildly elevated but does not meet criteria for prediabetes (which starts at 100-125), so A1C could be considered but the mammogram is the highest-priority screening at age 52. DEXA is recommended at age 65 for women without risk factors.",
+    "topic": "Health Promotion & Screening",
+    "difficulty": "medium",
+    "tags": ["screening", "USPSTF", "mammography"]
+  },
+  {
+    "id": "q002",
+    "stem": "According to USPSTF guidelines, at what age should average-risk adults begin colorectal cancer screening?",
+    "choices": ["A. 40 years", "B. 45 years", "C. 50 years", "D. 55 years"],
+    "answer": 1,
+    "rationale": "The USPSTF updated its recommendation in 2021, lowering the starting age for colorectal cancer screening from 50 to 45 for average-risk adults. Screening options include colonoscopy every 10 years, stool-based tests (FIT annually, FIT-DNA every 1-3 years), or CT colonography every 5 years.",
+    "topic": "Health Promotion & Screening",
+    "difficulty": "easy",
+    "tags": ["screening", "USPSTF", "colorectal cancer"]
+  },
+  {
+    "id": "q003",
+    "stem": "A 35-year-old male smoker asks about lung cancer screening. He has smoked 1 pack per day for 10 years. What is the most appropriate response?",
+    "choices": ["A. Order a low-dose CT scan now", "B. He does not meet criteria for lung cancer screening at this time", "C. Order a chest X-ray as initial screening", "D. Begin screening at age 40"],
+    "answer": 1,
+    "rationale": "USPSTF recommends annual low-dose CT screening for adults aged 50-80 who have a 20 pack-year smoking history and currently smoke or have quit within the past 15 years. This patient is 35 with a 10 pack-year history, so he does not meet the age or pack-year criteria. Chest X-ray is not recommended as a screening tool for lung cancer.",
+    "topic": "Health Promotion & Screening",
+    "difficulty": "medium",
+    "tags": ["screening", "lung cancer", "smoking"]
+  },
+  {
+    "id": "q004",
+    "stem": "A nurse practitioner is counseling a 16-year-old female about the HPV vaccine. The patient received her first dose at age 15. What is the correct dosing schedule?",
+    "choices": ["A. Two doses, 6-12 months apart", "B. Three doses at 0, 1-2, and 6 months", "C. Two doses, 1 month apart", "D. Single dose is sufficient after age 15"],
+    "answer": 1,
+    "rationale": "For individuals who begin the HPV vaccination series at age 15 or older, a three-dose schedule is recommended (0, 1-2 months, 6 months). The two-dose schedule (0 and 6-12 months) is only for those who start the series before age 15. This is an important age-based distinction in the CDC immunization schedule.",
+    "topic": "Health Promotion & Screening",
+    "difficulty": "medium",
+    "tags": ["immunization", "HPV", "adolescent health"]
+  },
+  {
+    "id": "q005",
+    "stem": "A 62-year-old male with a history of hypertension and type 2 diabetes presents with chest pressure radiating to his left arm for the past 30 minutes. His ECG shows ST-segment elevation in leads II, III, and aVF. What is the most appropriate initial action?",
+    "choices": ["A. Administer sublingual nitroglycerin and observe", "B. Activate emergency medical services (call 911) immediately", "C. Order a troponin level and repeat ECG in 15 minutes", "D. Start a heparin drip"],
+    "answer": 1,
+    "rationale": "ST-elevation in leads II, III, and aVF indicates an acute inferior STEMI. This is a medical emergency requiring immediate activation of EMS for transfer to a facility capable of percutaneous coronary intervention (PCI). Time is critical — 'door-to-balloon' time should be less than 90 minutes. While aspirin and nitroglycerin may be administered, activating EMS is the most critical first step in primary care.",
+    "topic": "Cardiology",
+    "difficulty": "medium",
+    "tags": ["STEMI", "emergency", "chest pain"]
+  },
+  {
+    "id": "q006",
+    "stem": "A 58-year-old female with newly diagnosed hypertension has a BP of 148/92 on two separate visits. She has no other comorbidities. According to the ACC/AHA guidelines, what is the most appropriate initial pharmacologic therapy?",
+    "choices": ["A. Metoprolol 25 mg daily", "B. Lisinopril 10 mg daily", "C. Clonidine 0.1 mg twice daily", "D. Spironolactone 25 mg daily"],
+    "answer": 1,
+    "rationale": "For initial treatment of hypertension in patients without compelling indications, first-line agents include ACE inhibitors (lisinopril), ARBs, calcium channel blockers, or thiazide diuretics. Lisinopril, an ACE inhibitor, is an appropriate first-line choice. Beta-blockers (metoprolol) are no longer first-line for uncomplicated hypertension. Clonidine is a central-acting agent reserved for resistant hypertension. Spironolactone is typically used as add-on therapy.",
+    "topic": "Cardiology",
+    "difficulty": "easy",
+    "tags": ["hypertension", "pharmacology", "ACC/AHA"]
+  },
+  {
+    "id": "q007",
+    "stem": "A 45-year-old male presents with a BP of 142/90. His 10-year ASCVD risk is calculated at 8%. His LDL is 145 mg/dL. According to current guidelines, what is the recommended management for his cholesterol?",
+    "choices": ["A. High-intensity statin therapy", "B. Moderate-intensity statin therapy", "C. Lifestyle modifications alone for 6 months", "D. Ezetimibe monotherapy"],
+    "answer": 1,
+    "rationale": "For patients aged 40-75 with LDL 70-189 mg/dL and a 10-year ASCVD risk of 7.5-19.9% (borderline to intermediate risk), a moderate-intensity statin is recommended after a clinician-patient risk discussion. High-intensity statins are reserved for those with ASCVD risk ≥20% or established cardiovascular disease. Lifestyle modifications alone would be insufficient given his risk level. Ezetimibe is not typically used as monotherapy first-line.",
+    "topic": "Cardiology",
+    "difficulty": "hard",
+    "tags": ["hyperlipidemia", "ASCVD", "statin therapy"]
+  },
+  {
+    "id": "q008",
+    "stem": "A 70-year-old female presents with an irregularly irregular pulse and a heart rate of 110 bpm. Her ECG confirms atrial fibrillation. She has a history of hypertension and diabetes. Her CHA₂DS₂-VASc score is 4. What anticoagulation is recommended?",
+    "choices": ["A. Aspirin 81 mg daily", "B. Apixaban 5 mg twice daily", "C. Warfarin with INR goal 1.5-2.0", "D. No anticoagulation needed"],
+    "answer": 1,
+    "rationale": "A CHA₂DS₂-VASc score of ≥2 in men or ≥3 in women warrants anticoagulation. Direct oral anticoagulants (DOACs) such as apixaban are preferred over warfarin for most patients with non-valvular atrial fibrillation due to fewer drug interactions, no INR monitoring requirement, and lower bleeding risk. Aspirin alone is insufficient for stroke prevention in AFib with this risk level.",
+    "topic": "Cardiology",
+    "difficulty": "medium",
+    "tags": ["atrial fibrillation", "anticoagulation", "CHA2DS2-VASc"]
+  },
+  {
+    "id": "q009",
+    "stem": "A 55-year-old male with a 30 pack-year smoking history presents with a chronic productive cough for the past 3 years. Spirometry shows FEV1/FVC ratio of 0.65 and FEV1 of 72% predicted. What is the most likely diagnosis?",
+    "choices": ["A. Asthma", "B. COPD — GOLD Stage II (Moderate)", "C. COPD — GOLD Stage I (Mild)", "D. Chronic bronchitis without obstruction"],
+    "answer": 1,
+    "rationale": "An FEV1/FVC ratio <0.70 confirms obstructive disease. With his significant smoking history and chronic productive cough, COPD is the most likely diagnosis. GOLD classification: Stage I (mild) FEV1 ≥80%; Stage II (moderate) FEV1 50-79%; Stage III (severe) FEV1 30-49%; Stage IV (very severe) FEV1 <30%. His FEV1 of 72% places him in GOLD Stage II (moderate).",
+    "topic": "Pulmonology",
+    "difficulty": "medium",
+    "tags": ["COPD", "spirometry", "GOLD classification"]
+  },
+  {
+    "id": "q010",
+    "stem": "A 22-year-old female presents with intermittent wheezing and chest tightness that worsens with exercise and cold air. She uses her albuterol inhaler about 3 times per week. Symptoms wake her from sleep once a month. How would you classify her asthma?",
+    "choices": ["A. Intermittent", "B. Mild persistent", "C. Moderate persistent", "D. Severe persistent"],
+    "answer": 1,
+    "rationale": "Asthma classification: Intermittent = symptoms ≤2 days/week, nighttime awakenings ≤2x/month, SABA use ≤2 days/week. Mild persistent = symptoms >2 days/week but not daily, nighttime awakenings 3-4x/month. This patient uses albuterol 3x/week (>2 days) and has nighttime symptoms monthly. Since she has symptoms >2 days/week, this is mild persistent asthma. Low-dose ICS is recommended for mild persistent asthma.",
+    "topic": "Pulmonology",
+    "difficulty": "medium",
+    "tags": ["asthma", "classification", "NAEPP"]
+  },
+  {
+    "id": "q011",
+    "stem": "A 68-year-old male with COPD (GOLD Stage II) is currently on tiotropium (Spiriva) alone. He reports increased dyspnea with moderate exertion over the past 2 months. What is the most appropriate step-up in therapy?",
+    "choices": ["A. Add a short-acting beta agonist PRN only", "B. Add a LABA such as salmeterol", "C. Switch to a systemic corticosteroid", "D. Prescribe continuous home oxygen"],
+    "answer": 1,
+    "rationale": "For patients with persistent symptoms on a LAMA (tiotropium) alone, adding a LABA is the recommended step-up therapy per GOLD guidelines. LAMA + LABA combination provides better bronchodilation than either alone. Systemic corticosteroids are not used for maintenance in COPD. Home oxygen is indicated only when PaO2 ≤55 mmHg or SpO2 ≤88%. A SABA alone would not address his ongoing symptoms adequately.",
+    "topic": "Pulmonology",
+    "difficulty": "medium",
+    "tags": ["COPD", "pharmacology", "GOLD guidelines"]
+  },
+  {
+    "id": "q012",
+    "stem": "A 40-year-old female with a history of well-controlled asthma on low-dose ICS presents with worsening cough, nasal congestion, and postnasal drip for 3 weeks. She has no fever or purulent sputum. What is the most likely cause of her cough exacerbation?",
+    "choices": ["A. Pneumonia", "B. Upper airway cough syndrome (postnasal drip)", "C. Gastroesophageal reflux disease", "D. Inadequate asthma controller medication"],
+    "answer": 1,
+    "rationale": "Upper airway cough syndrome (formerly postnasal drip syndrome) is one of the most common causes of chronic cough in adults. Her symptoms of nasal congestion and postnasal drip without fever or purulent sputum suggest this diagnosis. Treatment includes a first-generation antihistamine (e.g., chlorpheniramine) and/or nasal corticosteroid. While GERD and inadequate asthma control are also causes of chronic cough, the nasal symptoms point to upper airway cough syndrome.",
+    "topic": "Pulmonology",
+    "difficulty": "easy",
+    "tags": ["cough", "upper airway", "differential diagnosis"]
+  },
+  {
+    "id": "q013",
+    "stem": "A 48-year-old female with a BMI of 32 presents with fasting glucose of 132 mg/dL on two separate occasions. Her A1C is 7.2%. She has no contraindications to metformin. What is the most appropriate initial management?",
+    "choices": ["A. Lifestyle modifications alone for 3 months", "B. Metformin 500 mg twice daily plus lifestyle modifications", "C. Glipizide 5 mg daily", "D. Insulin glargine 10 units at bedtime"],
+    "answer": 1,
+    "rationale": "This patient meets criteria for type 2 diabetes (fasting glucose ≥126 on two occasions, A1C ≥6.5%). Per ADA guidelines, metformin is the preferred first-line pharmacologic agent for T2DM, combined with lifestyle modifications. Lifestyle modifications alone are appropriate for prediabetes but not for established diabetes. Sulfonylureas and insulin are not first-line unless A1C is very high (>10%) or the patient is symptomatic.",
+    "topic": "Endocrine",
+    "difficulty": "easy",
+    "tags": ["diabetes", "metformin", "ADA guidelines"]
+  },
+  {
+    "id": "q014",
+    "stem": "A 35-year-old female presents with fatigue, weight gain, constipation, and cold intolerance for the past 3 months. Her TSH is 12.5 mIU/L (normal 0.5-4.5) and free T4 is 0.6 ng/dL (normal 0.8-1.8). What is the most appropriate treatment?",
+    "choices": ["A. Levothyroxine starting at full replacement dose", "B. Liothyronine (T3) monotherapy", "C. Levothyroxine 25-50 mcg daily with titration", "D. Observation and recheck in 6 months"],
+    "answer": 2,
+    "rationale": "This patient has overt hypothyroidism (elevated TSH, low free T4 with symptoms). Levothyroxine is the treatment of choice. For young, otherwise healthy patients, starting at 1.6 mcg/kg/day is acceptable, but commonly clinicians start at 25-50 mcg and titrate every 6-8 weeks based on TSH levels. T3 monotherapy is not standard treatment. Observation would only be appropriate for subclinical hypothyroidism in certain cases.",
+    "topic": "Endocrine",
+    "difficulty": "easy",
+    "tags": ["hypothyroidism", "levothyroxine", "thyroid"]
+  },
+  {
+    "id": "q015",
+    "stem": "A 60-year-old male with type 2 diabetes has an A1C of 8.5% despite maximum dose metformin. He has a history of heart failure with reduced ejection fraction (HFrEF). Which add-on medication is most appropriate?",
+    "choices": ["A. Pioglitazone", "B. Empagliflozin (SGLT2 inhibitor)", "C. Glipizide", "D. Sitagliptin (DPP-4 inhibitor)"],
+    "answer": 1,
+    "rationale": "SGLT2 inhibitors (empagliflozin, dapagliflozin) have demonstrated cardiovascular and renal benefits and are specifically recommended as add-on therapy for patients with T2DM and heart failure or CKD. Pioglitazone (TZD) is CONTRAINDICATED in heart failure as it causes fluid retention. GLP-1 receptor agonists would also be a good choice but are not listed here. DPP-4 inhibitors are weight-neutral but do not have the CV benefit of SGLT2i.",
+    "topic": "Endocrine",
+    "difficulty": "hard",
+    "tags": ["diabetes", "SGLT2 inhibitor", "heart failure"]
+  },
+  {
+    "id": "q016",
+    "stem": "A 28-year-old female presents with palpitations, unintentional weight loss, heat intolerance, and tremors. Her TSH is 0.05 mIU/L and free T4 is 3.8 ng/dL. Physical exam reveals a diffusely enlarged, non-tender thyroid. What is the most likely diagnosis?",
+    "choices": ["A. Toxic multinodular goiter", "B. Graves' disease", "C. Subacute thyroiditis", "D. Thyroid storm"],
+    "answer": 1,
+    "rationale": "Graves' disease is the most common cause of hyperthyroidism, especially in young women. It presents with a diffusely enlarged thyroid, suppressed TSH, elevated free T4, and systemic symptoms (palpitations, weight loss, heat intolerance, tremors). Thyroid-stimulating immunoglobulin (TSI) or TSH receptor antibodies confirm the diagnosis. Toxic multinodular goiter typically presents in older patients with nodular thyroid. Subacute thyroiditis is usually painful and follows a viral illness.",
+    "topic": "Endocrine",
+    "difficulty": "medium",
+    "tags": ["hyperthyroidism", "Graves disease", "thyroid"]
+  },
+  {
+    "id": "q017",
+    "stem": "A 55-year-old male presents with burning epigastric pain that worsens after meals and when lying down. He has been taking ibuprofen regularly for knee pain. What is the most appropriate initial management?",
+    "choices": ["A. Start omeprazole 20 mg daily and discontinue ibuprofen", "B. Start sucralfate four times daily", "C. Refer for immediate upper endoscopy", "D. Prescribe H. pylori triple therapy empirically"],
+    "answer": 0,
+    "rationale": "This patient presents with classic GERD/NSAID-related dyspepsia. The most appropriate step is to discontinue the offending agent (ibuprofen) and start a PPI (omeprazole). Endoscopy is indicated for alarm symptoms (dysphagia, weight loss, GI bleeding, anemia, age >60 with new symptoms) which are not present. Empiric H. pylori treatment without testing is not recommended. Sucralfate is not first-line for GERD.",
+    "topic": "GI",
+    "difficulty": "easy",
+    "tags": ["GERD", "NSAIDs", "PPI"]
+  },
+  {
+    "id": "q018",
+    "stem": "A 38-year-old female presents with recurrent episodes of right upper quadrant pain after eating fatty meals, lasting 30-60 minutes. Labs show normal bilirubin and liver enzymes. What is the most appropriate diagnostic test?",
+    "choices": ["A. CT scan of the abdomen", "B. Right upper quadrant ultrasound", "C. HIDA scan", "D. Endoscopic retrograde cholangiopancreatography (ERCP)"],
+    "answer": 1,
+    "rationale": "Right upper quadrant ultrasound is the first-line diagnostic test for suspected cholelithiasis/biliary colic. It is non-invasive, cost-effective, and has high sensitivity (>95%) for detecting gallstones. CT scan is less sensitive for gallstones. HIDA scan is used when ultrasound is inconclusive and cholecystitis is suspected (evaluates cystic duct patency). ERCP is both diagnostic and therapeutic but is invasive and reserved for suspected choledocholithiasis.",
+    "topic": "GI",
+    "difficulty": "easy",
+    "tags": ["biliary colic", "gallstones", "ultrasound"]
+  },
+  {
+    "id": "q019",
+    "stem": "A 50-year-old male with a history of heavy alcohol use presents with spider angiomata, ascites, and palmar erythema. Labs reveal AST 120, ALT 60 (AST:ALT ratio >2:1), elevated bilirubin, and low albumin. What is the most likely diagnosis?",
+    "choices": ["A. Hepatitis C cirrhosis", "B. Alcoholic liver disease/cirrhosis", "C. Non-alcoholic fatty liver disease", "D. Hepatocellular carcinoma"],
+    "answer": 1,
+    "rationale": "The combination of heavy alcohol use, AST:ALT ratio >2:1, and signs of chronic liver disease (spider angiomata, ascites, palmar erythema) is classic for alcoholic liver disease/cirrhosis. In alcoholic liver disease, AST is typically elevated more than ALT (often 2:1 ratio), whereas in viral hepatitis the ALT is usually higher than AST. Low albumin and elevated bilirubin indicate impaired synthetic function consistent with cirrhosis.",
+    "topic": "GI",
+    "difficulty": "medium",
+    "tags": ["cirrhosis", "alcoholic liver disease", "liver enzymes"]
+  },
+  {
+    "id": "q020",
+    "stem": "A 65-year-old male presents with alternating diarrhea and constipation, unintentional weight loss of 15 lbs over 3 months, and iron deficiency anemia. What is the most important next step?",
+    "choices": ["A. Trial of fiber supplementation", "B. Stool culture and ova/parasites", "C. Colonoscopy", "D. Empiric trial of a PPI"],
+    "answer": 2,
+    "rationale": "This patient has alarm symptoms (unintentional weight loss, iron deficiency anemia, change in bowel habits) in a man over 50. These red flags necessitate prompt colonoscopy to evaluate for colorectal malignancy. IBS (treated with fiber) should only be diagnosed after excluding organic disease, especially with alarm features. Stool studies would not address the weight loss and anemia. PPI therapy is not indicated.",
+    "topic": "GI",
+    "difficulty": "medium",
+    "tags": ["colorectal cancer", "alarm symptoms", "colonoscopy"]
+  },
+  {
+    "id": "q021",
+    "stem": "A 72-year-old male presents with urinary frequency, nocturia (3-4 times/night), weak stream, and sensation of incomplete emptying. DRE reveals a symmetrically enlarged, non-tender prostate. PSA is 3.2 ng/mL. What is the most appropriate initial management?",
+    "choices": ["A. Watchful waiting only", "B. Tamsulosin 0.4 mg daily", "C. Refer for transurethral resection of the prostate (TURP)", "D. Start finasteride 5 mg daily"],
+    "answer": 1,
+    "rationale": "This patient has moderate-to-severe lower urinary tract symptoms (LUTS) due to benign prostatic hyperplasia (BPH). Alpha-1 blockers (tamsulosin, doxazosin) are first-line pharmacologic therapy for BPH with bothersome symptoms. They relax smooth muscle in the prostate and bladder neck for rapid symptom relief. Watchful waiting is for mild symptoms (AUA score <8). 5-alpha reductase inhibitors (finasteride) are added for significantly enlarged prostates. TURP is reserved for refractory cases.",
+    "topic": "Renal/Urology",
+    "difficulty": "medium",
+    "tags": ["BPH", "tamsulosin", "LUTS"]
+  },
+  {
+    "id": "q022",
+    "stem": "A 25-year-old female presents with dysuria, urinary frequency, and suprapubic discomfort for 2 days. She is afebrile and has no flank pain. Urine dipstick shows positive nitrites and leukocyte esterase. What is the most appropriate treatment?",
+    "choices": ["A. Ciprofloxacin 500 mg twice daily for 7 days", "B. Nitrofurantoin 100 mg twice daily for 5 days", "C. Amoxicillin 500 mg three times daily for 7 days", "D. Trimethoprim-sulfamethoxazole for 10 days"],
+    "answer": 1,
+    "rationale": "For uncomplicated cystitis in women, first-line treatments are nitrofurantoin (Macrobid) 100 mg BID for 5 days or trimethoprim-sulfamethoxazole (Bactrim DS) BID for 3 days (not 10 days). Fluoroquinolones (ciprofloxacin) should be reserved for complicated UTIs due to resistance concerns and side effects. Amoxicillin is not recommended due to high resistance rates among uropathogens.",
+    "topic": "Renal/Urology",
+    "difficulty": "easy",
+    "tags": ["UTI", "cystitis", "nitrofurantoin"]
+  },
+  {
+    "id": "q023",
+    "stem": "A 58-year-old male with type 2 diabetes and hypertension has a routine urinalysis showing albumin-to-creatinine ratio (ACR) of 180 mg/g (normal <30) and eGFR of 52 mL/min/1.73m². What stage of CKD does this represent?",
+    "choices": ["A. Stage 2", "B. Stage 3a", "C. Stage 3b", "D. Stage 4"],
+    "answer": 2,
+    "rationale": "CKD staging by GFR: Stage 1 = GFR ≥90; Stage 2 = 60-89; Stage 3a = 45-59; Stage 3b = 30-44; Stage 4 = 15-29; Stage 5 = <15. His eGFR of 52 places him in Stage 3a. The albuminuria (ACR 180, classified as A3 — severely increased) indicates significant kidney damage. For diabetic kidney disease, ACE inhibitors or ARBs are recommended to slow progression. SGLT2 inhibitors also provide renal protection.",
+    "topic": "Renal/Urology",
+    "difficulty": "medium",
+    "tags": ["CKD", "staging", "diabetic nephropathy"]
+  },
+  {
+    "id": "q024",
+    "stem": "A 30-year-old male presents with sudden onset of severe left flank pain radiating to the groin. He is writhing in pain and unable to find a comfortable position. Urinalysis shows microscopic hematuria. What is the most appropriate initial imaging study?",
+    "choices": ["A. Abdominal X-ray (KUB)", "B. Non-contrast CT of the abdomen and pelvis", "C. Renal ultrasound", "D. Intravenous pyelogram (IVP)"],
+    "answer": 1,
+    "rationale": "Non-contrast CT of the abdomen and pelvis is the gold standard imaging study for suspected nephrolithiasis. It has the highest sensitivity (>95%) and specificity (>98%) for detecting kidney stones and can identify the stone size, location, and any obstruction. KUB misses radiolucent stones. Ultrasound is preferred in pregnancy and pediatrics but has lower sensitivity. IVP has largely been replaced by CT.",
+    "topic": "Renal/Urology",
+    "difficulty": "medium",
+    "tags": ["nephrolithiasis", "kidney stones", "CT scan"]
+  },
+  {
+    "id": "q025",
+    "stem": "A 32-year-old female presents with a well-demarcated, erythematous, scaly plaque on her elbows bilaterally. The lesions have a silvery scale that bleeds when removed (Auspitz sign). What is the most likely diagnosis?",
+    "choices": ["A. Eczema (atopic dermatitis)", "B. Psoriasis", "C. Tinea corporis", "D. Contact dermatitis"],
+    "answer": 1,
+    "rationale": "Psoriasis presents with well-demarcated, erythematous plaques with silvery-white scale, commonly on extensor surfaces (elbows, knees), scalp, and lower back. The Auspitz sign (pinpoint bleeding when scale is removed) is characteristic. Eczema (atopic dermatitis) typically involves flexural surfaces and has poorly demarcated borders. Tinea corporis has an annular pattern with central clearing. Contact dermatitis follows the distribution of an external irritant.",
+    "topic": "Dermatology",
+    "difficulty": "easy",
+    "tags": ["psoriasis", "Auspitz sign", "skin lesions"]
+  },
+  {
+    "id": "q026",
+    "stem": "A 45-year-old male presents with a changing mole on his back. On examination, the lesion is asymmetric, has irregular borders, varies in color (brown, black, red), and measures 8 mm in diameter. What is the most appropriate next step?",
+    "choices": ["A. Reassure and recheck in 6 months", "B. Apply cryotherapy", "C. Excisional biopsy", "D. Prescribe topical imiquimod"],
+    "answer": 2,
+    "rationale": "This lesion meets ABCDE criteria for melanoma (Asymmetry, Border irregularity, Color variation, Diameter >6 mm, Evolving). Any suspicious pigmented lesion should undergo excisional biopsy with narrow margins for histopathologic evaluation. Cryotherapy and topical treatments are inappropriate for potentially malignant melanocytic lesions. 'Watch and wait' delays diagnosis of a potentially lethal cancer.",
+    "topic": "Dermatology",
+    "difficulty": "medium",
+    "tags": ["melanoma", "ABCDE criteria", "biopsy"]
+  },
+  {
+    "id": "q027",
+    "stem": "A 19-year-old male presents with a honey-crusted lesion on his face near the nose. The lesions began as small vesicles that ruptured. What is the most likely causative organism?",
+    "choices": ["A. Streptococcus pyogenes", "B. Staphylococcus aureus", "C. Pseudomonas aeruginosa", "D. Candida albicans"],
+    "answer": 1,
+    "rationale": "Impetigo is characterized by honey-crusted lesions, often on the face. Staphylococcus aureus is the most common cause of non-bullous impetigo, though Group A Streptococcus (S. pyogenes) can also cause it. S. aureus has surpassed S. pyogenes as the primary pathogen. Treatment for localized impetigo includes topical mupirocin; for extensive disease, oral antibiotics (cephalexin or dicloxacillin) are used.",
+    "topic": "Dermatology",
+    "difficulty": "easy",
+    "tags": ["impetigo", "S. aureus", "skin infection"]
+  },
+  {
+    "id": "q028",
+    "stem": "A 60-year-old female presents with a painful, vesicular rash in a dermatomal distribution on her left trunk. She is within 72 hours of rash onset. What is the most appropriate treatment?",
+    "choices": ["A. Acyclovir 200 mg five times daily for 5 days", "B. Valacyclovir 1000 mg three times daily for 7 days", "C. Topical calamine lotion only", "D. Amoxicillin 500 mg three times daily for 10 days"],
+    "answer": 1,
+    "rationale": "This presentation is classic herpes zoster (shingles). Antiviral therapy is most effective when started within 72 hours of rash onset. Valacyclovir 1000 mg TID for 7 days is preferred over acyclovir due to better bioavailability and less frequent dosing (acyclovir dose for zoster is 800 mg 5x/day, not 200 mg). Pain management (gabapentin, NSAIDs) should also be provided. Shingrix vaccine is recommended for adults ≥50 for prevention.",
+    "topic": "Dermatology",
+    "difficulty": "medium",
+    "tags": ["herpes zoster", "shingles", "valacyclovir"]
+  },
+  {
+    "id": "q029",
+    "stem": "A 42-year-old female presents with pain and stiffness in both hands, particularly in the PIP and MCP joints, that is worse in the morning and lasts over 1 hour. Symptoms have been present for 8 weeks. What is the most appropriate initial lab workup?",
+    "choices": ["A. Uric acid level and joint aspiration", "B. RF, anti-CCP antibodies, ESR, and CRP", "C. ANA and anti-dsDNA antibodies", "D. HLA-B27 testing"],
+    "answer": 1,
+    "rationale": "Symmetric polyarthritis of the small joints (PIP, MCP) with prolonged morning stiffness (>1 hour) for >6 weeks is the classic presentation of rheumatoid arthritis. Initial workup includes RF (rheumatoid factor), anti-CCP antibodies (more specific for RA), and inflammatory markers (ESR, CRP). Anti-CCP has ~95% specificity for RA. ANA/anti-dsDNA are for SLE. Uric acid is for gout (which is typically monoarticular). HLA-B27 is for ankylosing spondylitis.",
+    "topic": "MSK",
+    "difficulty": "medium",
+    "tags": ["rheumatoid arthritis", "anti-CCP", "joint pain"]
+  },
+  {
+    "id": "q030",
+    "stem": "A 55-year-old overweight male presents with acute onset of severe pain, redness, and swelling in his right first metatarsophalangeal (MTP) joint. He recently attended a banquet where he consumed red meat and alcohol. What is the definitive diagnostic test?",
+    "choices": ["A. Serum uric acid level", "B. X-ray of the foot", "C. Synovial fluid analysis with polarized microscopy", "D. MRI of the foot"],
+    "answer": 2,
+    "rationale": "The definitive diagnosis of gout is made by synovial fluid analysis demonstrating negatively birefringent monosodium urate crystals under polarized light microscopy. Serum uric acid can be normal during an acute flare and is not diagnostic. X-rays may be normal in early gout. The presentation (acute monoarthritis of the first MTP joint with triggers of alcohol/red meat) is classic for podagra (gouty arthritis).",
+    "topic": "MSK",
+    "difficulty": "medium",
+    "tags": ["gout", "podagra", "synovial fluid analysis"]
+  },
+  {
+    "id": "q031",
+    "stem": "A 35-year-old office worker presents with low back pain for 2 weeks after lifting a heavy box. He has no radiation of pain, no bowel/bladder changes, and no neurologic deficits. What is the most appropriate management?",
+    "choices": ["A. Lumbar MRI", "B. NSAIDs and continued activity as tolerated", "C. Strict bed rest for 2 weeks", "D. Referral to a neurosurgeon"],
+    "answer": 1,
+    "rationale": "Acute mechanical low back pain without red flags (no neurologic deficits, no bowel/bladder changes, no saddle anesthesia, no fever, no weight loss) is managed conservatively with NSAIDs, acetaminophen, and continued activity as tolerated. Imaging is not indicated in the first 4-6 weeks unless red flags are present. Bed rest is not recommended and can worsen outcomes. Surgical referral is premature without evidence of nerve compression.",
+    "topic": "MSK",
+    "difficulty": "easy",
+    "tags": ["low back pain", "conservative management", "red flags"]
+  },
+  {
+    "id": "q032",
+    "stem": "A 50-year-old female presents with shoulder pain for 3 months. She has difficulty reaching overhead and behind her back. On exam, there is significant loss of both active and passive range of motion in all directions. What is the most likely diagnosis?",
+    "choices": ["A. Rotator cuff tear", "B. Adhesive capsulitis (frozen shoulder)", "C. Biceps tendinitis", "D. Shoulder impingement syndrome"],
+    "answer": 1,
+    "rationale": "Adhesive capsulitis (frozen shoulder) is characterized by progressive loss of both active and passive range of motion in all directions (global restriction). It is most common in women aged 40-60 and is associated with diabetes. Rotator cuff tears show weakness with specific movements but usually maintain passive ROM. Impingement causes pain with overhead activities but does not typically restrict passive ROM. Treatment includes physical therapy, NSAIDs, and possible corticosteroid injection.",
+    "topic": "MSK",
+    "difficulty": "medium",
+    "tags": ["frozen shoulder", "adhesive capsulitis", "ROM"]
+  },
+  {
+    "id": "q033",
+    "stem": "A 72-year-old female presents with sudden onset of right-sided weakness and speech difficulty. Symptoms began 90 minutes ago. Non-contrast CT of the head shows no hemorrhage. What is the most appropriate next step?",
+    "choices": ["A. Administer aspirin 325 mg", "B. Activate stroke team for IV alteplase evaluation", "C. Obtain an MRI before treatment", "D. Start IV heparin"],
+    "answer": 1,
+    "rationale": "This patient presents with acute ischemic stroke symptoms within the 4.5-hour window for IV thrombolysis with alteplase (tPA). A non-contrast CT showing no hemorrhage clears the patient for thrombolytic consideration. Time is critical — 'time is brain.' Aspirin should not be given within 24 hours of thrombolysis. MRI would delay treatment. IV heparin is not indicated for acute ischemic stroke treatment.",
+    "topic": "Neurology",
+    "difficulty": "medium",
+    "tags": ["stroke", "tPA", "emergency"]
+  },
+  {
+    "id": "q034",
+    "stem": "A 40-year-old male presents with recurrent unilateral throbbing headaches with nausea, photophobia, and phonophobia lasting 4-72 hours. Headaches occur 2-3 times per month and significantly impair his daily activities. What is the most appropriate preventive medication?",
+    "choices": ["A. Sumatriptan", "B. Propranolol", "C. Acetaminophen", "D. Butalbital-containing compound"],
+    "answer": 1,
+    "rationale": "This patient has migraine without aura occurring frequently enough (≥4 headache days/month or significant disability) to warrant prophylactic therapy. Propranolol (a beta-blocker) is a first-line preventive medication for migraine. Other first-line preventives include topiramate, amitriptyline, and valproate. Sumatriptan is an abortive therapy (triptan), not preventive. Acetaminophen is for mild acute treatment. Butalbital compounds carry risk of medication overuse headache.",
+    "topic": "Neurology",
+    "difficulty": "medium",
+    "tags": ["migraine", "prophylaxis", "propranolol"]
+  },
+  {
+    "id": "q035",
+    "stem": "A 68-year-old male presents with resting tremor of his right hand, bradykinesia, and cogwheel rigidity. His gait is shuffling with decreased arm swing. What is the most likely diagnosis?",
+    "choices": ["A. Essential tremor", "B. Parkinson's disease", "C. Multiple sclerosis", "D. Normal pressure hydrocephalus"],
+    "answer": 1,
+    "rationale": "The cardinal features of Parkinson's disease are: resting tremor, bradykinesia (slowness of movement), rigidity (cogwheel), and postural instability. Essential tremor is an action/intention tremor that improves at rest. Normal pressure hydrocephalus presents with the triad of gait instability, urinary incontinence, and dementia (wet, wobbly, wacky). Multiple sclerosis typically presents in younger patients with diverse neurologic symptoms.",
+    "topic": "Neurology",
+    "difficulty": "easy",
+    "tags": ["Parkinson disease", "tremor", "bradykinesia"]
+  },
+  {
+    "id": "q036",
+    "stem": "A 25-year-old female presents with a severe headache that she describes as 'the worst headache of my life.' It started suddenly about 2 hours ago. She has no history of migraines. What is the most critical next step?",
+    "choices": ["A. Prescribe sumatriptan and follow up in 1 week", "B. Non-contrast CT of the head", "C. Lumbar puncture immediately", "D. Start IV ketorolac for pain control"],
+    "answer": 1,
+    "rationale": "A sudden-onset 'thunderclap' headache described as the 'worst headache of my life' is subarachnoid hemorrhage (SAH) until proven otherwise. Non-contrast CT of the head is the first-line imaging study and detects SAH in >95% of cases within 6 hours. If CT is negative but clinical suspicion remains high, lumbar puncture should follow (looking for xanthochromia). This is a neurological emergency requiring immediate evaluation.",
+    "topic": "Neurology",
+    "difficulty": "medium",
+    "tags": ["subarachnoid hemorrhage", "thunderclap headache", "emergency"]
+  },
+  {
+    "id": "q037",
+    "stem": "A 22-year-old college student presents with fever, sore throat, fatigue, and posterior cervical lymphadenopathy for 1 week. His rapid strep test is negative. CBC shows lymphocytosis with 15% atypical lymphocytes. What is the most likely diagnosis?",
+    "choices": ["A. Acute HIV infection", "B. Infectious mononucleosis", "C. Streptococcal pharyngitis", "D. Cytomegalovirus infection"],
+    "answer": 1,
+    "rationale": "The classic triad of infectious mononucleosis (EBV) is fever, pharyngitis, and lymphadenopathy (especially posterior cervical). Atypical lymphocytes on CBC (>10%) are highly suggestive. Confirm with a heterophile antibody test (Monospot) or EBV-specific serologies. Important: avoid prescribing amoxicillin/ampicillin as it causes a characteristic maculopapular rash in mono patients. Advise against contact sports due to risk of splenic rupture.",
+    "topic": "Infectious Disease",
+    "difficulty": "easy",
+    "tags": ["mononucleosis", "EBV", "atypical lymphocytes"]
+  },
+  {
+    "id": "q038",
+    "stem": "A 30-year-old male presents with a painless genital ulcer. He reports unprotected sexual contact 3 weeks ago. On exam, there is a single, firm, round, painless ulcer with a clean base on the penile shaft. What is the most likely diagnosis?",
+    "choices": ["A. Herpes simplex virus", "B. Primary syphilis (chancre)", "C. Chancroid", "D. Lymphogranuloma venereum"],
+    "answer": 1,
+    "rationale": "A single, painless, firm ulcer with a clean base and indurated edges is the classic chancre of primary syphilis (Treponema pallidum). Herpes presents with painful, grouped vesicles. Chancroid (H. ducreyi) causes painful, soft ulcers with purulent base. Diagnosis is confirmed with darkfield microscopy or serologic testing (RPR/VDRL screening, FTA-ABS confirmatory). Treatment is benzathine penicillin G 2.4 million units IM x 1.",
+    "topic": "Infectious Disease",
+    "difficulty": "medium",
+    "tags": ["syphilis", "STI", "chancre"]
+  },
+  {
+    "id": "q039",
+    "stem": "A 5-year-old child is brought in by his mother with a 2-day history of fever and a red, lace-like rash on his cheeks and arms. He attends daycare. The rash appeared after the fever resolved. What is the most likely diagnosis?",
+    "choices": ["A. Measles", "B. Fifth disease (erythema infectiosum)", "C. Scarlet fever", "D. Roseola infantum"],
+    "answer": 1,
+    "rationale": "Fifth disease (erythema infectiosum), caused by parvovirus B19, presents with a classic 'slapped cheek' appearance followed by a lace-like (reticular) rash on the trunk and extremities. Children are contagious before the rash appears and no longer contagious once the rash develops. It is typically self-limiting. Important: parvovirus B19 can cause aplastic crisis in patients with sickle cell disease and hydrops fetalis in pregnancy.",
+    "topic": "Infectious Disease",
+    "difficulty": "easy",
+    "tags": ["parvovirus B19", "fifth disease", "pediatric rash"]
+  },
+  {
+    "id": "q040",
+    "stem": "A 45-year-old male healthcare worker has a positive tuberculin skin test (TST) with 12 mm induration. He is asymptomatic and his chest X-ray is normal. What is the most appropriate management?",
+    "choices": ["A. No treatment needed", "B. Isoniazid (INH) for 9 months", "C. Four-drug RIPE therapy for 2 months", "D. Repeat TST in 3 months"],
+    "answer": 1,
+    "rationale": "A healthcare worker with a positive TST (≥10 mm for HCWs) and normal chest X-ray has latent TB infection (LTBI). Treatment of LTBI prevents progression to active TB. Isoniazid (INH) for 9 months is a standard regimen. Alternative: rifampin for 4 months or INH + rifapentine weekly for 12 doses. RIPE therapy (isoniazid, rifampin, pyrazinamide, ethambutol) is for active TB. Monitor for hepatotoxicity and supplement with vitamin B6 (pyridoxine).",
+    "topic": "Infectious Disease",
+    "difficulty": "medium",
+    "tags": ["tuberculosis", "LTBI", "isoniazid"]
+  },
+  {
+    "id": "q041",
+    "stem": "A 28-year-old G2P1 female at 10 weeks gestation presents for her first prenatal visit. Which of the following labs is NOT part of the routine initial prenatal panel?",
+    "choices": ["A. CBC with differential", "B. Blood type and Rh factor with antibody screen", "C. Glucose tolerance test (GTT)", "D. Rubella immunity (IgG)"],
+    "answer": 2,
+    "rationale": "The initial prenatal panel typically includes: CBC, blood type/Rh/antibody screen, urinalysis/culture, rubella IgG, hepatitis B surface antigen, syphilis (RPR/VDRL), HIV, and Pap smear if due. The glucose tolerance test (GTT) for gestational diabetes screening is performed at 24-28 weeks gestation, not at the initial visit. Early glucose screening may be done for high-risk patients (obesity, prior GDM, PCOS) but is not routine for all patients.",
+    "topic": "Women's Health / OB-GYN",
+    "difficulty": "medium",
+    "tags": ["prenatal care", "screening", "gestational diabetes"]
+  },
+  {
+    "id": "q042",
+    "stem": "A 32-year-old female presents with heavy, irregular menstrual bleeding for 4 months. She has no history of pregnancy. Pelvic exam is normal. Pregnancy test is negative. What is the most appropriate initial diagnostic test?",
+    "choices": ["A. Endometrial biopsy", "B. Pelvic ultrasound", "C. Coagulation studies", "D. TSH level"],
+    "answer": 1,
+    "rationale": "Pelvic ultrasound (transvaginal preferred) is the first-line diagnostic test for abnormal uterine bleeding (AUB) to evaluate for structural causes (fibroids, polyps, ovarian pathology, endometrial thickness). While TSH should also be checked (thyroid dysfunction is a common cause of AUB), ultrasound is the most appropriate initial imaging test. Endometrial biopsy is indicated for women ≥45 or those with risk factors for endometrial hyperplasia/cancer.",
+    "topic": "Women's Health / OB-GYN",
+    "difficulty": "medium",
+    "tags": ["abnormal uterine bleeding", "ultrasound", "AUB"]
+  },
+  {
+    "id": "q043",
+    "stem": "A 24-year-old female presents with lower abdominal pain, purulent vaginal discharge, and cervical motion tenderness on bimanual exam. Her temperature is 101.2°F. What is the most likely diagnosis and appropriate treatment?",
+    "choices": ["A. Appendicitis — surgical referral", "B. Pelvic inflammatory disease (PID) — ceftriaxone IM + doxycycline PO", "C. Bacterial vaginosis — metronidazole", "D. Ectopic pregnancy — methotrexate"],
+    "answer": 1,
+    "rationale": "The triad of lower abdominal pain, purulent cervical discharge, and cervical motion tenderness (chandelier sign) with fever is classic for PID. CDC-recommended outpatient treatment: ceftriaxone 500 mg IM x 1 + doxycycline 100 mg PO BID x 14 days +/- metronidazole 500 mg PO BID x 14 days. Hospitalization is indicated for tubo-ovarian abscess, pregnancy, failure of outpatient therapy, or severe illness. Always test for chlamydia and gonorrhea.",
+    "topic": "Women's Health / OB-GYN",
+    "difficulty": "medium",
+    "tags": ["PID", "cervical motion tenderness", "STI"]
+  },
+  {
+    "id": "q044",
+    "stem": "A 50-year-old female presents with hot flashes, night sweats, vaginal dryness, and irregular periods for 8 months. Her last menstrual period was 6 months ago. FSH is 65 mIU/mL. She has no history of breast cancer or VTE. She requests treatment. What is the most appropriate first-line therapy?",
+    "choices": ["A. Low-dose combined hormone therapy (estrogen + progesterone)", "B. Estrogen-only therapy", "C. SSRI (paroxetine) only", "D. Herbal supplements (black cohosh)"],
+    "answer": 0,
+    "rationale": "For women with an intact uterus experiencing moderate-to-severe vasomotor symptoms, combined estrogen-progesterone therapy is first-line. Progesterone must be included to prevent endometrial hyperplasia/cancer from unopposed estrogen. Estrogen-only therapy is appropriate only after hysterectomy. SSRIs (paroxetine is FDA-approved for hot flashes) are second-line or for women with contraindications to HRT. Start at the lowest effective dose for the shortest duration needed.",
+    "topic": "Women's Health / OB-GYN",
+    "difficulty": "medium",
+    "tags": ["menopause", "HRT", "vasomotor symptoms"]
+  },
+  {
+    "id": "q045",
+    "stem": "A 4-year-old boy is brought in for a well-child visit. His mother is concerned because he is not yet potty-trained at night. He is dry during the day. His physical exam is normal. What is the most appropriate response?",
+    "choices": ["A. Order a urinalysis and renal ultrasound", "B. Reassure that nighttime dryness often develops by age 5-7 and this is developmentally normal", "C. Prescribe desmopressin (DDAVP)", "D. Refer to pediatric urology"],
+    "answer": 1,
+    "rationale": "Primary nocturnal enuresis (bedwetting) is common and considered developmentally normal up to age 5-7. It affects about 15-20% of 5-year-olds. Since this child is only 4 and has daytime continence with a normal exam, reassurance is most appropriate. Workup (urinalysis, imaging) is indicated if there are daytime symptoms, secondary enuresis (previously dry for ≥6 months), or abnormal exam findings. DDAVP is considered after age 6-7 if behavioral interventions fail.",
+    "topic": "Pediatrics",
+    "difficulty": "easy",
+    "tags": ["enuresis", "developmental milestones", "pediatric"]
+  },
+  {
+    "id": "q046",
+    "stem": "A 9-month-old infant is brought to the clinic with a 3-day history of high fever (104°F) that suddenly resolved yesterday. Today, a diffuse maculopapular rash appeared on the trunk and is spreading to the extremities. The infant is playful and eating well. What is the most likely diagnosis?",
+    "choices": ["A. Measles", "B. Roseola infantum (HHV-6)", "C. Fifth disease", "D. Rubella"],
+    "answer": 1,
+    "rationale": "Roseola infantum (exanthem subitum), caused by HHV-6, classically presents in infants 6-24 months with 3-5 days of high fever followed by the sudden appearance of a maculopapular rash as the fever resolves. The child typically appears well once the rash appears. Measles presents with cough, coryza, conjunctivitis, and Koplik spots before the rash. Fifth disease has a 'slapped cheek' pattern. Rubella has postauricular lymphadenopathy.",
+    "topic": "Pediatrics",
+    "difficulty": "easy",
+    "tags": ["roseola", "HHV-6", "pediatric rash"]
+  },
+  {
+    "id": "q047",
+    "stem": "A 6-year-old girl presents with a sore throat, fever of 102°F, and tender anterior cervical lymphadenopathy. Exam shows tonsillar exudates and palatal petechiae. Rapid strep test is positive. She has a documented penicillin allergy (anaphylaxis). What is the most appropriate antibiotic?",
+    "choices": ["A. Amoxicillin 50 mg/kg/day for 10 days", "B. Azithromycin 12 mg/kg/day for 5 days", "C. Cephalexin 20 mg/kg/dose BID for 10 days", "D. Clindamycin 7 mg/kg/dose TID for 10 days"],
+    "answer": 1,
+    "rationale": "For Group A Strep pharyngitis with true penicillin anaphylaxis, cephalosporins should be avoided due to potential cross-reactivity (though the risk is low with newer cephalosporins). Azithromycin or clindamycin are appropriate alternatives. Azithromycin is generally preferred for its shorter course and once-daily dosing, improving compliance in children. Amoxicillin is the first-line choice for non-allergic patients.",
+    "topic": "Pediatrics",
+    "difficulty": "medium",
+    "tags": ["strep pharyngitis", "penicillin allergy", "pediatric"]
+  },
+  {
+    "id": "q048",
+    "stem": "During a well-child visit for a 12-month-old, the NP notes the infant can pull to stand, cruise along furniture, say 'mama' and 'dada' specifically, and use a pincer grasp. The mother asks if development is on track. What is the most appropriate response?",
+    "choices": ["A. The child is developmentally delayed — refer for evaluation", "B. The child is meeting expected developmental milestones for age", "C. The child should be walking independently by now", "D. Speech is delayed — refer for speech evaluation"],
+    "answer": 1,
+    "rationale": "At 12 months, expected milestones include: Gross motor — pulls to stand, cruises, may take first steps; Fine motor — pincer grasp; Language — 1-3 words ('mama,' 'dada' used specifically), follows simple commands; Social — waves bye-bye, plays peek-a-boo. This child is meeting all expected milestones. Independent walking can occur from 9-15 months and is not expected until 15 months. Two-word sentences develop by 24 months.",
+    "topic": "Pediatrics",
+    "difficulty": "easy",
+    "tags": ["developmental milestones", "12 months", "well-child"]
+  },
+  {
+    "id": "q049",
+    "stem": "A 32-year-old female presents with persistent depressed mood, loss of interest in activities, fatigue, difficulty concentrating, feelings of worthlessness, and insomnia for the past 3 weeks. She denies suicidal ideation. She has no prior psychiatric history. What is the most appropriate initial treatment?",
+    "choices": ["A. Bupropion 150 mg daily", "B. Sertraline 50 mg daily", "C. Amitriptyline 25 mg at bedtime", "D. Alprazolam 0.5 mg three times daily"],
+    "answer": 1,
+    "rationale": "This patient meets DSM-5 criteria for major depressive disorder (≥5 symptoms for ≥2 weeks including depressed mood or anhedonia). SSRIs (sertraline, fluoxetine, escitalopram) are first-line treatment for MDD due to their efficacy, safety profile, and tolerability. Bupropion is an alternative but not first-line for typical MDD. TCAs (amitriptyline) have more side effects and are second-line. Benzodiazepines (alprazolam) are not indicated for depression and carry dependence risk.",
+    "topic": "Psychiatry",
+    "difficulty": "easy",
+    "tags": ["depression", "SSRI", "sertraline"]
+  },
+  {
+    "id": "q050",
+    "stem": "A 28-year-old male presents with excessive worry about multiple life events (work, health, finances) for the past 8 months. He has difficulty controlling the worry, reports restlessness, muscle tension, and difficulty sleeping. He has no panic attacks. What is the most likely diagnosis?",
+    "choices": ["A. Panic disorder", "B. Generalized anxiety disorder (GAD)", "C. Social anxiety disorder", "D. Obsessive-compulsive disorder"],
+    "answer": 1,
+    "rationale": "GAD is characterized by excessive, difficult-to-control worry about multiple domains lasting ≥6 months, with ≥3 of the following: restlessness, fatigue, difficulty concentrating, irritability, muscle tension, sleep disturbance. This patient meets all criteria. Panic disorder involves recurrent unexpected panic attacks. Social anxiety is fear of social/performance situations. OCD involves intrusive thoughts and compulsive behaviors. First-line treatment: SSRI/SNRI and/or CBT.",
+    "topic": "Psychiatry",
+    "difficulty": "easy",
+    "tags": ["GAD", "anxiety", "DSM-5"]
+  },
+  {
+    "id": "q051",
+    "stem": "A 19-year-old college student is brought to the clinic by friends who are concerned about his behavior. Over the past 2 weeks, he has been sleeping only 2-3 hours/night, spending excessively, talking rapidly, and has started multiple new business ventures. He believes he has 'special powers.' What is the most likely diagnosis?",
+    "choices": ["A. Major depressive disorder with psychotic features", "B. Bipolar I disorder — manic episode", "C. ADHD", "D. Substance-induced mood disorder"],
+    "answer": 1,
+    "rationale": "This presentation is classic for a manic episode: decreased need for sleep, grandiosity ('special powers'), pressured speech, increased goal-directed activity, and excessive involvement in risky activities (spending). A manic episode lasting ≥7 days (or requiring hospitalization) defines Bipolar I disorder. Substance use should be ruled out. Mood stabilizers (lithium, valproate) or atypical antipsychotics are first-line treatment. SSRIs alone can trigger mania in bipolar disorder.",
+    "topic": "Psychiatry",
+    "difficulty": "medium",
+    "tags": ["bipolar disorder", "mania", "mood disorders"]
+  },
+  {
+    "id": "q052",
+    "stem": "A 45-year-old female on sertraline 150 mg daily for depression reports she wants to stop her medication because she feels better. She has been on the medication for 4 months and this was her first depressive episode. What is the most appropriate advice?",
+    "choices": ["A. She can stop immediately since she feels better", "B. Continue for at least 6-12 months from the time of symptom remission, then taper gradually", "C. She should remain on the medication indefinitely", "D. Switch to a lower dose immediately"],
+    "answer": 1,
+    "rationale": "For a first episode of major depression, guidelines recommend continuing antidepressant therapy for at least 6-12 months after achieving remission to prevent relapse. The medication should then be tapered gradually over weeks to months to avoid discontinuation syndrome (dizziness, nausea, irritability, 'brain zaps'). Abrupt discontinuation is never recommended. Indefinite treatment may be considered for recurrent episodes (≥3) or severe episodes.",
+    "topic": "Psychiatry",
+    "difficulty": "medium",
+    "tags": ["depression", "SSRI", "medication management"]
+  },
+  {
+    "id": "q053",
+    "stem": "An 80-year-old female with a history of osteoporosis presents after a fall. X-ray reveals a Colles fracture of the right wrist. Her current medications include calcium 1200 mg and vitamin D 800 IU daily. What additional pharmacologic therapy is most appropriate?",
+    "choices": ["A. Increase calcium to 2000 mg daily", "B. Start alendronate 70 mg weekly", "C. Start raloxifene 60 mg daily", "D. Testosterone therapy"],
+    "answer": 1,
+    "rationale": "Bisphosphonates (alendronate, risedronate) are first-line pharmacotherapy for osteoporosis, especially after a fragility fracture. They reduce the risk of vertebral, hip, and nonvertebral fractures. Take on an empty stomach with a full glass of water and remain upright for 30 minutes. Contraindicated in esophageal disorders and severe renal impairment (CrCl <30-35 mL/min). Calcium and vitamin D alone are insufficient after a fracture. Raloxifene mainly reduces vertebral fracture risk.",
+    "topic": "Geriatrics",
+    "difficulty": "medium",
+    "tags": ["osteoporosis", "bisphosphonate", "fragility fracture"]
+  },
+  {
+    "id": "q054",
+    "stem": "A 78-year-old male presents with his daughter who reports he has become increasingly forgetful over the past year. He gets lost driving to familiar places and has difficulty managing his finances. His MMSE score is 21/30. He is alert and oriented to person only. What is the most likely diagnosis?",
+    "choices": ["A. Normal aging", "B. Alzheimer's disease", "C. Delirium", "D. Major depressive disorder (pseudodementia)"],
+    "answer": 1,
+    "rationale": "Alzheimer's disease is the most common cause of dementia, characterized by insidious onset and progressive decline in memory and cognitive function. An MMSE score of 21-24 suggests mild dementia. Key features include difficulty with recent memory, getting lost, impaired judgment, and executive dysfunction. Delirium has an acute onset with fluctuating consciousness. Depression (pseudodementia) may mimic dementia but typically has a more rapid onset with prominent mood symptoms. Labs (TSH, B12, CBC, metabolic panel) should be checked to rule out reversible causes.",
+    "topic": "Geriatrics",
+    "difficulty": "medium",
+    "tags": ["Alzheimer disease", "dementia", "MMSE"]
+  },
+  {
+    "id": "q055",
+    "stem": "A 75-year-old male being treated for hypertension with lisinopril and amlodipine is found to have orthostatic hypotension (BP drops 25 mmHg systolic upon standing). He reports dizziness when getting up. Which medication change is most appropriate?",
+    "choices": ["A. Add midodrine", "B. Discontinue amlodipine and monitor", "C. Add fludrocortisone", "D. Increase fluid intake only"],
+    "answer": 1,
+    "rationale": "In elderly patients with orthostatic hypotension while on antihypertensives, the first step is to reduce or discontinue medications that may be contributing. Amlodipine (a calcium channel blocker with vasodilatory effects) is more likely to cause orthostatic symptoms than lisinopril. Reducing the antihypertensive regimen and reassessing BP is the safest approach. Adding medications like midodrine or fludrocortisone should be considered only after addressing contributing medications and non-pharmacologic measures.",
+    "topic": "Geriatrics",
+    "difficulty": "medium",
+    "tags": ["orthostatic hypotension", "polypharmacy", "elderly"]
+  },
+  {
+    "id": "q056",
+    "stem": "An 82-year-old female in a nursing home is found to have a stage 2 pressure ulcer on her sacrum. It presents as a shallow open ulcer with a red-pink wound bed without slough. What is the most appropriate wound care?",
+    "choices": ["A. Dry gauze dressing changes daily", "B. Moist wound healing with hydrocolloid dressing", "C. Immediate surgical debridement", "D. Apply hydrogen peroxide to the wound bed"],
+    "answer": 1,
+    "rationale": "Stage 2 pressure ulcers (partial-thickness skin loss involving epidermis/dermis presenting as a shallow open ulcer) are best managed with moist wound healing using hydrocolloid or foam dressings. Moist environments promote granulation and re-epithelialization. Dry gauze can damage new tissue on removal. Hydrogen peroxide is cytotoxic to healthy tissue. Surgical debridement is reserved for stage 3-4 ulcers with necrotic tissue. Also address nutrition, pressure redistribution, and repositioning.",
+    "topic": "Geriatrics",
+    "difficulty": "medium",
+    "tags": ["pressure ulcer", "wound care", "nursing home"]
+  },
+  {
+    "id": "q057",
+    "stem": "A 65-year-old female with a history of type 2 diabetes presents with burning pain and tingling in both feet in a stocking distribution. She describes the pain as worse at night. Monofilament testing shows decreased sensation bilaterally. What is the first-line pharmacologic treatment for her neuropathic pain?",
+    "choices": ["A. Oxycodone", "B. Duloxetine", "C. Ibuprofen", "D. Amitriptyline"],
+    "answer": 1,
+    "rationale": "Duloxetine (an SNRI) is FDA-approved and considered first-line for diabetic peripheral neuropathy pain. Other first-line options include gabapentin and pregabalin. TCAs (amitriptyline) are effective but have more side effects (anticholinergic, cardiac), especially in elderly patients. NSAIDs are ineffective for neuropathic pain. Opioids are not first-line and carry significant risks. Optimal glucose control is also essential to slow neuropathy progression.",
+    "topic": "Endocrine",
+    "difficulty": "medium",
+    "tags": ["diabetic neuropathy", "duloxetine", "neuropathic pain"]
+  },
+  {
+    "id": "q058",
+    "stem": "A 3-year-old child presents with barking cough, inspiratory stridor, and hoarseness. Symptoms started with mild rhinorrhea 2 days ago. He has no drooling and is not toxic-appearing. His oxygen saturation is 97%. What is the most appropriate initial treatment?",
+    "choices": ["A. Amoxicillin-clavulanate orally", "B. Oral dexamethasone 0.6 mg/kg single dose", "C. Emergent intubation", "D. Inhaled albuterol"],
+    "answer": 1,
+    "rationale": "This is a classic presentation of viral croup (laryngotracheobronchitis), most commonly caused by parainfluenza virus. The hallmark triad is barky cough, stridor, and hoarseness. Oral dexamethasone (0.6 mg/kg, single dose) is the standard of care for croup of any severity. For moderate-to-severe croup with significant stridor at rest, nebulized racemic epinephrine can be added. Antibiotics are not indicated for viral croup. Albuterol is for lower airway disease.",
+    "topic": "Pediatrics",
+    "difficulty": "medium",
+    "tags": ["croup", "dexamethasone", "stridor"]
+  },
+  {
+    "id": "q059",
+    "stem": "A 38-year-old female presents for a routine visit. She asks about cervical cancer screening. Her last Pap smear 3 years ago was normal and HPV co-testing was negative. She has no history of abnormal Pap smears. What is the most appropriate screening recommendation?",
+    "choices": ["A. Pap smear alone this year, repeat in 3 years", "B. Pap smear with HPV co-testing this year, repeat in 5 years", "C. HPV testing alone this year, repeat in 5 years", "D. No screening needed until age 45"],
+    "answer": 2,
+    "rationale": "For women aged 30-65, USPSTF offers three acceptable screening strategies: Pap smear alone every 3 years, HPV testing alone every 5 years, or Pap + HPV co-testing every 5 years. Since her last co-test was 3 years ago and normal, she could get a Pap alone now (at the 3-year mark) or wait 2 more years for her next co-test. However, HPV primary testing every 5 years is also an accepted strategy. The key is that she is due for screening now if choosing the 3-year Pap interval.",
+    "topic": "Health Promotion & Screening",
+    "difficulty": "medium",
+    "tags": ["cervical cancer screening", "Pap smear", "HPV"]
+  },
+  {
+    "id": "q060",
+    "stem": "A 48-year-old male presents with heartburn and regurgitation occurring 3 or more times per week for the past 2 months despite taking omeprazole 20 mg daily. He has no alarm symptoms. What is the most appropriate next step?",
+    "choices": ["A. Refer for immediate upper endoscopy", "B. Increase omeprazole to 40 mg daily and optimize lifestyle modifications", "C. Switch to ranitidine 150 mg twice daily", "D. Add metoclopramide 10 mg before meals"],
+    "answer": 1,
+    "rationale": "For patients with persistent GERD symptoms on standard-dose PPI, the next step is to optimize PPI therapy by increasing to twice-daily dosing or increasing the dose, taken 30-60 minutes before meals, along with reinforcing lifestyle modifications (weight loss, elevate head of bed, avoid trigger foods, no eating 3 hours before bed). Endoscopy is indicated if symptoms persist despite 8 weeks of optimized PPI therapy or if alarm symptoms develop. Adding prokinetics carries risk of tardive dyskinesia.",
+    "topic": "GI",
+    "difficulty": "medium",
+    "tags": ["GERD", "PPI optimization", "reflux"]
+  },
+  {
+    "id": "q061",
+    "stem": "A nurse practitioner is reviewing the Beers Criteria for a 78-year-old patient's medication list. Which of the following medications should be avoided in this elderly patient according to the Beers Criteria?",
+    "choices": ["A. Lisinopril", "B. Diphenhydramine for insomnia", "C. Acetaminophen for pain", "D. Metformin"],
+    "answer": 1,
+    "rationale": "The Beers Criteria identifies potentially inappropriate medications for older adults. First-generation antihistamines like diphenhydramine are strongly discouraged in the elderly due to their potent anticholinergic effects (confusion, sedation, urinary retention, constipation, falls risk, cognitive impairment). Safer alternatives for insomnia include sleep hygiene, melatonin, or low-dose trazodone. Lisinopril, acetaminophen, and metformin (if eGFR allows) are generally safe in the elderly.",
+    "topic": "Geriatrics",
+    "difficulty": "easy",
+    "tags": ["Beers criteria", "polypharmacy", "elderly"]
+  },
+  {
+    "id": "q062",
+    "stem": "A 15-year-old female is brought by her mother with concerns about not yet having started menstruation. She has Tanner stage 2 breast development and minimal pubic hair. Her height and weight are at the 50th percentile. What is the most appropriate initial step?",
+    "choices": ["A. Start combined oral contraceptive pills to induce menses", "B. Reassure — this is within normal limits, and menarche typically occurs within 2-3 years of breast development", "C. Order a karyotype immediately", "D. Start progesterone challenge test"],
+    "answer": 1,
+    "rationale": "Primary amenorrhea is defined as no menses by age 15 with secondary sexual characteristics (or by age 13 without any). Since this girl is 15 with Tanner stage 2 breast development (meaning puberty has started), she is within the normal timeline. Menarche typically occurs 2-3 years after thelarche (breast budding, Tanner stage 2). Reassurance with close follow-up is appropriate. If no menses by age 16 or 3 years after breast development, workup should begin.",
+    "topic": "Women's Health / OB-GYN",
+    "difficulty": "hard",
+    "tags": ["amenorrhea", "puberty", "Tanner staging"]
+  },
+  {
+    "id": "q063",
+    "stem": "A 55-year-old male with a history of alcohol use disorder presents with confusion, ophthalmoplegia, and ataxia. What is the most appropriate IMMEDIATE treatment?",
+    "choices": ["A. Oral thiamine 100 mg daily", "B. IV thiamine before any glucose administration", "C. IV dextrose 50%", "D. Oral folate supplementation"],
+    "answer": 1,
+    "rationale": "The triad of confusion, ophthalmoplegia (eye movement abnormalities), and ataxia is classic for Wernicke encephalopathy, caused by thiamine (B1) deficiency. IV thiamine must be given BEFORE glucose administration, as glucose metabolism requires thiamine and giving glucose first can worsen or precipitate Wernicke encephalopathy. This is a medical emergency — untreated, it can progress to Korsakoff syndrome (irreversible amnesia and confabulation).",
+    "topic": "Neurology",
+    "difficulty": "hard",
+    "tags": ["Wernicke encephalopathy", "thiamine", "alcohol use"]
+  },
+  {
+    "id": "q064",
+    "stem": "A 42-year-old female presents with fatigue, joint pain, and a facial rash across both cheeks and the bridge of her nose that spares the nasolabial folds. Labs show positive ANA (1:320) and positive anti-dsDNA antibodies. What is the most likely diagnosis?",
+    "choices": ["A. Rosacea", "B. Systemic lupus erythematosus (SLE)", "C. Dermatomyositis", "D. Rheumatoid arthritis"],
+    "answer": 1,
+    "rationale": "The malar (butterfly) rash sparing the nasolabial folds, combined with joint pain, fatigue, positive ANA, and positive anti-dsDNA antibodies, is highly characteristic of SLE. Anti-dsDNA antibodies are highly specific for SLE and correlate with disease activity, especially nephritis. Rosacea can look similar but involves the nasolabial folds and has no systemic features. Dermatomyositis has a heliotrope rash around the eyes. SLE requires multisystem assessment including renal function.",
+    "topic": "MSK",
+    "difficulty": "medium",
+    "tags": ["SLE", "malar rash", "anti-dsDNA"]
+  },
+  {
+    "id": "q065",
+    "stem": "A nurse practitioner is prescribing trimethoprim-sulfamethoxazole (TMP-SMX) for a patient with a UTI. The patient is also on warfarin for atrial fibrillation. What is the most important consideration?",
+    "choices": ["A. TMP-SMX has no significant drug interactions with warfarin", "B. TMP-SMX significantly increases the anticoagulant effect of warfarin — monitor INR closely", "C. TMP-SMX decreases warfarin effectiveness", "D. Switch warfarin to aspirin during the antibiotic course"],
+    "answer": 1,
+    "rationale": "TMP-SMX inhibits the CYP2C9 enzyme that metabolizes warfarin, significantly increasing warfarin levels and INR, which increases bleeding risk. When prescribing TMP-SMX to a patient on warfarin, the NP should: monitor INR more frequently, consider dose adjustment of warfarin, or choose an alternative antibiotic (nitrofurantoin for uncomplicated UTI). This is one of the most clinically significant drug interactions in primary care. Never abruptly switch anticoagulants.",
+    "topic": "Infectious Disease",
+    "difficulty": "hard",
+    "tags": ["drug interaction", "warfarin", "TMP-SMX"]
+  }
+]

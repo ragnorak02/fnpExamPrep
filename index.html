@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>FNP Exam Prep</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header id="app-header">
+    <span class="app-title">FNP Prep</span>
+    <span class="daily-progress-pill" id="daily-pill">
+      <span class="progress-count" id="daily-count">0</span>/<span id="daily-goal">5</span> today
+    </span>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <nav id="tab-bar">
+    <button class="tab-btn active" data-view="practice">Practice</button>
+    <button class="tab-btn" data-view="stats">Stats</button>
+    <button class="tab-btn" data-view="bank">Bank</button>
+    <button class="tab-btn" data-view="settings">Settings</button>
+  </nav>
+
+  <main>
+    <!-- PRACTICE VIEW -->
+    <section id="view-practice" class="view active">
+      <!-- Start Screen -->
+      <div id="practice-start" class="practice-start">
+        <h2>Ready to Practice?</h2>
+        <p>Select a mode and start studying</p>
+
+        <div class="mode-selector" id="mode-selector">
+          <label class="mode-option selected" data-mode="daily">
+            <input type="radio" name="mode" value="daily" checked>
+            <div>
+              <div class="mode-label">Daily Mix</div>
+              <div class="mode-desc">Smart selection based on your history</div>
+            </div>
+          </label>
+          <label class="mode-option" data-mode="weak">
+            <input type="radio" name="mode" value="weak">
+            <div>
+              <div class="mode-label">Weak Areas</div>
+              <div class="mode-desc">Focus on topics you struggle with</div>
+            </div>
+          </label>
+          <label class="mode-option" data-mode="topic">
+            <input type="radio" name="mode" value="topic">
+            <div>
+              <div class="mode-label">Topic Filter</div>
+              <div class="mode-desc">Study a specific subject area</div>
+            </div>
+          </label>
+          <label class="mode-option" data-mode="flagged">
+            <input type="radio" name="mode" value="flagged">
+            <div>
+              <div class="mode-label">Flagged Only</div>
+              <div class="mode-desc">Review questions you flagged</div>
+            </div>
+          </label>
+        </div>
+
+        <select class="topic-filter-select hidden" id="topic-filter-select">
+          <option value="">All Topics</option>
+        </select>
+
+        <button class="btn btn-primary btn-full" id="start-session-btn">Start Session</button>
+      </div>
+
+      <!-- Active Session -->
+      <div id="practice-session" class="hidden">
+        <div class="question-progress">
+          <span id="q-counter">Question 1 of 5</span>
+          <span id="q-score">0 correct</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <div id="question-card">
+          <span class="question-topic-badge" id="q-topic"></span>
+          <div class="question-stem" id="q-stem"></div>
+          <div class="choices-list" id="q-choices"></div>
+
+          <button class="btn btn-primary btn-full" id="submit-btn" disabled>Submit Answer</button>
+
+          <div id="feedback-area" class="hidden">
+            <button class="rationale-toggle" id="rationale-toggle">Show Rationale ▼</button>
+            <div class="rationale-box hidden" id="rationale-box"></div>
+            <div class="question-actions">
+              <button class="btn btn-secondary" id="flag-btn">Flag</button>
+              <button class="btn btn-primary" id="next-btn">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Summary -->
+      <div id="practice-summary" class="hidden session-summary">
+        <h2>Session Complete!</h2>
+        <div id="summary-quote" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;"></div>
+        <div class="summary-score" id="summary-score">0%</div>
+        <div class="summary-stats" id="summary-stats"></div>
+        <button class="btn btn-primary btn-full" id="new-session-btn">New Session</button>
+        <button class="btn btn-secondary btn-full mt-8" id="review-missed-btn" style="display:none;">Review Missed Questions</button>
+      </div>
+    </section>
+
+    <!-- STATS VIEW -->
+    <section id="view-stats" class="view">
+      <div class="stats-overview" id="stats-overview"></div>
+      <div class="card" id="streak-card"></div>
+      <div class="card mt-16">
+        <div class="card-title">Accuracy by Topic</div>
+        <table class="topic-stats-table" id="topic-stats-table">
+          <thead>
+            <tr>
+              <th>Topic</th>
+              <th>Acc.</th>
+              <th style="width:35%"></th>
+            </tr>
+          </thead>
+          <tbody id="topic-stats-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- QUESTION BANK VIEW -->
+    <section id="view-bank" class="view">
+      <div class="bank-controls">
+        <input type="text" class="search-input" id="bank-search" placeholder="Search questions...">
+        <div class="filter-pills" id="bank-filters"></div>
+        <div class="bank-count" id="bank-count"></div>
+      </div>
+      <div class="bank-list" id="bank-list"></div>
+    </section>
+
+    <!-- SETTINGS VIEW -->
+    <section id="view-settings" class="view">
+      <div class="setting-group">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Questions per day</div>
+            <div class="setting-desc">Daily practice goal</div>
+          </div>
+          <div class="stepper">
+            <button class="stepper-btn" id="goal-minus">−</button>
+            <span class="stepper-value" id="goal-value">5</span>
+            <button class="stepper-btn" id="goal-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Dark Mode</div>
+            <div class="setting-desc">Toggle light/dark theme</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="theme-switch" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Exclude Mastered</div>
+            <div class="setting-desc">Skip questions marked as mastered</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="exclude-mastered-switch">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Import Questions</div>
+            <div class="setting-desc">Paste JSON to add/update questions</div>
+          </div>
+          <button class="btn btn-sm btn-secondary" id="import-btn">Import</button>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Export Questions</div>
+            <div class="setting-desc">Download your question bank as JSON</div>
+          </div>
+          <button class="btn btn-sm btn-secondary" id="export-btn">Export</button>
+        </div>
+      </div>
+
+      <div class="reset-section">
+        <h3>Reset Options</h3>
+        <div class="reset-buttons">
+          <button class="btn btn-secondary btn-full" id="reset-today-btn">Reset Today's Progress</button>
+          <button class="btn btn-secondary btn-full" id="reset-stats-btn">Reset All Statistics</button>
+          <button class="btn btn-danger btn-full" id="reset-all-btn">Reset Everything</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Modal Overlay -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal-content"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
