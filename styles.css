@@ -6,7 +6,7 @@
   --bg-input: #253456;
   --text-primary: #e0e0e0;
   --text-secondary: #a0a8c0;
-  --text-muted: #6b7394;
+  --text-muted: #8892b0;
   --accent: #4fc3f7;
   --accent-hover: #3aa8db;
   --accent-bg: rgba(79, 195, 247, 0.12);
@@ -43,6 +43,12 @@
   --toast-bg: rgba(255, 255, 255, 0.95);
   --overlay: rgba(0, 0, 0, 0.4);
   --pill-bg: #e0e4ea;
+}
+
+/* ========== FOCUS VISIBLE ========== */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ========== RESET / BASE ========== */
@@ -266,7 +272,7 @@ body {
 .btn-sm {
   padding: 8px 14px;
   font-size: 0.85rem;
-  min-height: 36px;
+  min-height: 44px;
 }
 
 /* ========== PRACTICE VIEW ========== */
@@ -432,6 +438,20 @@ body {
   cursor: default;
 }
 
+.choice-icon {
+  float: right;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.choice-btn.correct .choice-icon {
+  color: var(--correct);
+}
+
+.choice-btn.incorrect .choice-icon {
+  color: var(--incorrect);
+}
+
 .rationale-box {
   background: var(--bg-input);
   border-left: 4px solid var(--accent);
@@ -444,6 +464,8 @@ body {
 }
 
 .rationale-toggle {
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   color: var(--accent);
@@ -452,6 +474,7 @@ body {
   font-weight: 600;
   padding: 8px 0;
   margin-bottom: 8px;
+  min-height: 44px;
 }
 
 .question-actions {
@@ -461,6 +484,107 @@ body {
 
 .question-actions .btn {
   flex: 1;
+}
+
+/* Session Nav */
+.session-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.session-nav .btn-sm {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 10px;
+  font-size: 1.1rem;
+}
+
+.pip-container {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0;
+  align-items: center;
+}
+
+.pip-container::-webkit-scrollbar {
+  display: none;
+}
+
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+  /* 24px tap target via padding */
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-sizing: content-box;
+  outline-offset: 7px;
+}
+
+.pip:hover {
+  transform: scale(1.3);
+}
+
+.pip.pip-current {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.pip.pip-correct {
+  background: var(--correct);
+}
+
+.pip.pip-incorrect {
+  background: var(--incorrect);
+}
+
+.pip.pip-selected {
+  background: var(--accent);
+}
+
+.pip.pip-memorized {
+  background: gold;
+}
+
+/* Learning Controls */
+.learning-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.learning-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-height: 44px;
+}
+
+.learning-toggle input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 18px;
+  height: 18px;
+}
+
+.back-into-mix-active {
+  background: var(--accent) !important;
+  color: #fff !important;
 }
 
 /* Session Summary */
@@ -621,6 +745,8 @@ body {
 }
 
 .filter-pill {
+  display: inline-flex;
+  align-items: center;
   padding: 6px 12px;
   border-radius: 16px;
   border: 1px solid var(--border);
@@ -630,6 +756,7 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  min-height: 44px;
 }
 
 .filter-pill.active {
@@ -733,7 +860,7 @@ body {
 .bank-item-actions .btn-sm {
   font-size: 0.78rem;
   padding: 6px 10px;
-  min-height: 32px;
+  min-height: 44px;
 }
 
 /* ========== SETTINGS VIEW ========== */
@@ -775,8 +902,8 @@ body {
 }
 
 .stepper-btn {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--bg-input);
@@ -905,12 +1032,18 @@ body {
 }
 
 .toast-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
   font-size: 1.2rem;
-  padding: 0 4px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  margin: -10px -12px -10px 0;
   line-height: 1;
 }
 
@@ -932,6 +1065,18 @@ body {
 
 .toast.closing {
   animation: fadeOut 0.2s ease-in forwards;
+}
+
+.toast-success {
+  border-left: 4px solid var(--correct);
+}
+
+.toast-error {
+  border-left: 4px solid var(--incorrect);
+}
+
+.toast-info {
+  border-left: 4px solid var(--accent);
 }
 
 /* ========== MODAL ========== */
@@ -1127,6 +1272,71 @@ body {
   .choice-btn {
     padding: 12px 14px;
     font-size: 0.9rem;
+  }
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========== COVER SCREEN (Galaxy Z Flip) ========== */
+@media (max-width: 280px) {
+  .view {
+    padding: 8px;
+    padding-bottom: 60px;
+  }
+
+  #app-header {
+    padding: 8px 10px;
+  }
+
+  .app-title {
+    font-size: 0.9rem;
+  }
+
+  .daily-progress-pill {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .tab-btn {
+    font-size: 0.75rem;
+    padding: 10px 4px;
+  }
+
+  .mode-option {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .mode-label {
+    font-size: 0.85rem;
+  }
+
+  .mode-desc {
+    font-size: 0.72rem;
+  }
+
+  .question-stem {
+    font-size: 0.9rem;
+  }
+
+  .choice-btn {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .summary-score {
+    font-size: 2.2rem;
+  }
+
+  .stat-card .stat-number {
+    font-size: 1.4rem;
   }
 }
 

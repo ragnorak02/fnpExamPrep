@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <title>FNP Exam Prep</title>
@@ -18,16 +18,16 @@
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
   </header>
 
-  <nav id="tab-bar">
-    <button class="tab-btn active" data-view="practice">Practice</button>
-    <button class="tab-btn" data-view="stats">Stats</button>
-    <button class="tab-btn" data-view="bank">Bank</button>
-    <button class="tab-btn" data-view="settings">Settings</button>
+  <nav id="tab-bar" role="tablist">
+    <button class="tab-btn active" data-view="practice" role="tab" aria-selected="true" aria-controls="view-practice">Practice</button>
+    <button class="tab-btn" data-view="stats" role="tab" aria-selected="false" aria-controls="view-stats">Stats</button>
+    <button class="tab-btn" data-view="bank" role="tab" aria-selected="false" aria-controls="view-bank">Bank</button>
+    <button class="tab-btn" data-view="settings" role="tab" aria-selected="false" aria-controls="view-settings">Settings</button>
   </nav>
 
   <main>
     <!-- PRACTICE VIEW -->
-    <section id="view-practice" class="view active">
+    <section id="view-practice" class="view active" role="tabpanel">
       <!-- Start Screen -->
       <div id="practice-start" class="practice-start">
         <h2>Ready to Practice?</h2>
@@ -69,6 +69,7 @@
         </select>
 
         <button class="btn btn-primary btn-full" id="start-session-btn">Start Session</button>
+        <button class="btn btn-secondary btn-full mt-8 hidden" id="resume-session-btn">Resume Session</button>
       </div>
 
       <!-- Active Session -->
@@ -81,6 +82,12 @@
           <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
         </div>
 
+        <div id="session-nav" class="session-nav">
+          <button class="btn btn-sm btn-secondary" id="prev-btn" disabled>&larr;</button>
+          <div class="pip-container" id="pip-container"></div>
+          <button class="btn btn-sm btn-secondary" id="next-nav-btn" disabled>&rarr;</button>
+        </div>
+
         <div id="question-card">
           <span class="question-topic-badge" id="q-topic"></span>
           <div class="question-stem" id="q-stem"></div>
@@ -91,6 +98,13 @@
           <div id="feedback-area" class="hidden">
             <button class="rationale-toggle" id="rationale-toggle">Show Rationale ▼</button>
             <div class="rationale-box hidden" id="rationale-box"></div>
+            <div class="learning-controls" id="learning-controls">
+              <label class="learning-toggle">
+                <input type="checkbox" id="memorized-toggle">
+                <span>Memorized</span>
+              </label>
+              <button class="btn btn-sm btn-secondary" id="back-into-mix-btn">Back Into Mix</button>
+            </div>
             <div class="question-actions">
               <button class="btn btn-secondary" id="flag-btn">Flag</button>
               <button class="btn btn-primary" id="next-btn">Next</button>
@@ -106,12 +120,12 @@
         <div class="summary-score" id="summary-score">0%</div>
         <div class="summary-stats" id="summary-stats"></div>
         <button class="btn btn-primary btn-full" id="new-session-btn">New Session</button>
-        <button class="btn btn-secondary btn-full mt-8" id="review-missed-btn" style="display:none;">Review Missed Questions</button>
+        <button class="btn btn-secondary btn-full mt-8 hidden" id="review-missed-btn">Review Missed Questions</button>
       </div>
     </section>
 
     <!-- STATS VIEW -->
-    <section id="view-stats" class="view">
+    <section id="view-stats" class="view" role="tabpanel">
       <div class="stats-overview" id="stats-overview"></div>
       <div class="card" id="streak-card"></div>
       <div class="card mt-16">
@@ -130,7 +144,7 @@
     </section>
 
     <!-- QUESTION BANK VIEW -->
-    <section id="view-bank" class="view">
+    <section id="view-bank" class="view" role="tabpanel">
       <div class="bank-controls">
         <input type="text" class="search-input" id="bank-search" placeholder="Search questions...">
         <div class="filter-pills" id="bank-filters"></div>
@@ -140,7 +154,7 @@
     </section>
 
     <!-- SETTINGS VIEW -->
-    <section id="view-settings" class="view">
+    <section id="view-settings" class="view" role="tabpanel">
       <div class="setting-group">
         <div class="setting-row">
           <div>
@@ -173,6 +187,16 @@
           </div>
           <label class="toggle-switch">
             <input type="checkbox" id="exclude-mastered-switch">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Exclude Memorized</div>
+            <div class="setting-desc">Skip questions you've memorized</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="exclude-memorized-switch">
             <span class="toggle-slider"></span>
           </label>
         </div>

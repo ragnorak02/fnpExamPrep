@@ -19,20 +19,38 @@
       localStorage.setItem(key, JSON.stringify(obj));
     } catch (e) {
       console.error('Failed to save ' + key, e);
+      showToast('Storage full — progress may not be saved.', 'error');
     }
   }
 
   // ========== STATE ==========
+  // Migrate history: unwrap { byId: ... } wrapper if present, else use flat
+  var _rawHistory = safeParse('fnp:history', {});
+  if (_rawHistory && _rawHistory.byId) {
+    _rawHistory = _rawHistory.byId;
+  }
+  // Ensure memorized + forceRepracticeUntilISO fields exist on every entry
+  Object.keys(_rawHistory).forEach(function (id) {
+    var h = _rawHistory[id];
+    if (h.memorized === undefined) h.memorized = false;
+    if (h.forceRepracticeUntilISO === undefined) h.forceRepracticeUntilISO = null;
+  });
+
+  var _rawSettings = safeParse('fnp:settings', {
+    theme: 'dark',
+    questionsPerDay: 5,
+    reviewMode: 'daily',
+    topicFilter: null,
+    excludeMastered: false,
+    excludeMemorized: false
+  });
+  // Ensure new keys exist on migrated settings
+  if (_rawSettings.excludeMemorized === undefined) _rawSettings.excludeMemorized = false;
+
   var state = {
-    settings: safeParse('fnp:settings', {
-      theme: 'dark',
-      questionsPerDay: 5,
-      reviewMode: 'daily',
-      topicFilter: null,
-      excludeMastered: false
-    }),
+    settings: _rawSettings,
     questionBank: safeParse('fnp:questionBank', null),
-    history: safeParse('fnp:history', {}),
+    history: _rawHistory,
     daily: safeParse('fnp:daily', null),
     usage: safeParse('fnp:usage', {
       lastOpenISODate: null,
@@ -46,12 +64,26 @@
     selectedChoice: null
   };
 
+  function saveHistory() {
+    save('fnp:history', { byId: state.history });
+  }
+
   // ========== DOM REFERENCES ==========
   var $  = function (sel) { return document.querySelector(sel); };
   var $$ = function (sel) { return document.querySelectorAll(sel); };
 
   // ========== INIT ==========
   async function init() {
+    // Apply theme immediately
+    applyTheme();
+
+    // Show loading state
+    var startBtn = document.querySelector('#start-session-btn');
+    if (startBtn) {
+      startBtn.disabled = true;
+      startBtn.textContent = 'Loading questions...';
+    }
+
     // Load quotes
     try {
       var res = await fetch('data/quotes.json');
@@ -67,17 +99,54 @@
         state.questionBank = await qRes.json();
         save('fnp:questionBank', state.questionBank);
       } catch (e) {
-        showToast('Could not load questions. If using file:// protocol, please host on a local server (e.g., npx serve) or static hosting.');
+        showToast('Could not load questions. If using file:// protocol, please host on a local server (e.g., npx serve) or static hosting.', 'error');
         state.questionBank = [];
         save('fnp:questionBank', state.questionBank);
       }
     }
 
-    // Apply theme
-    applyTheme();
+    // Restore start button
+    if (startBtn) {
+      startBtn.disabled = false;
+      startBtn.textContent = 'Start Session';
+    }
 
-    // Initialize daily tracker
+    // Initialize daily tracker (handles migration from old schema)
     initDaily();
+
+    // Resume check: if there's an incomplete session in daily, rebuild it
+    var daily = state.daily;
+    if (daily.sessionQuestionIds.length > 0 && !daily.completedAtISO) {
+      var bank = state.questionBank || [];
+      var bankMap = {};
+      bank.forEach(function (q) { bankMap[q.id] = q; });
+
+      var sessionQuestions = [];
+      daily.sessionQuestionIds.forEach(function (id) {
+        if (bankMap[id]) sessionQuestions.push(bankMap[id]);
+      });
+
+      if (sessionQuestions.length > 0) {
+        // Count correct from persisted answers
+        var correctCount = 0;
+        Object.keys(daily.answersById).forEach(function (id) {
+          var a = daily.answersById[id];
+          if (a.isSubmitted && a.isCorrect) correctCount++;
+        });
+
+        state.session = {
+          questions: sessionQuestions,
+          currentIndex: daily.currentIndex,
+          correctCount: correctCount,
+          mode: 'daily'
+        };
+
+        $('#practice-start').classList.add('hidden');
+        $('#practice-summary').classList.add('hidden');
+        $('#practice-session').classList.remove('hidden');
+        navigateTo(daily.currentIndex);
+      }
+    }
 
     // Check streak
     checkAndUpdateStreak();
@@ -105,34 +174,44 @@
   }
 
   // ========== DAILY TRACKER ==========
-  function todayISO() {
-    return new Date().toISOString().slice(0, 10);
+  function getTodayISODate() {
+    return new Date().toLocaleDateString('en-CA');
+  }
+
+  function createFreshDaily() {
+    return {
+      isoDate: getTodayISODate(),
+      sessionQuestionIds: [],
+      currentIndex: 0,
+      answersById: {},
+      markedById: {},
+      completedAtISO: null
+    };
   }
 
   function initDaily() {
-    var today = todayISO();
-    if (!state.daily || state.daily.date !== today) {
-      state.daily = {
-        date: today,
-        goal: state.settings.questionsPerDay,
-        attempted: 0,
-        correct: 0,
-        questionIds: [],
-        currentIndex: 0,
-        answers: []
-      };
+    var today = getTodayISODate();
+    // Migrate or reset: missing, old schema (has 'date' instead of 'isoDate'), or new day
+    if (!state.daily || state.daily.date !== undefined || state.daily.isoDate !== today) {
+      state.daily = createFreshDaily();
       save('fnp:daily', state.daily);
     }
   }
 
   function updateDailyPill() {
-    $('#daily-count').textContent = state.daily ? state.daily.attempted : 0;
+    var count = 0;
+    if (state.daily && state.daily.answersById) {
+      Object.keys(state.daily.answersById).forEach(function (id) {
+        if (state.daily.answersById[id].isSubmitted) count++;
+      });
+    }
+    $('#daily-count').textContent = count;
     $('#daily-goal').textContent = state.settings.questionsPerDay;
   }
 
   // ========== STREAK + TOAST ==========
   function checkAndUpdateStreak() {
-    var today = todayISO();
+    var today = getTodayISODate();
     var usage = state.usage;
 
     if (usage.lastOpenISODate === today) return; // Already opened today
@@ -171,10 +250,17 @@
     return state.quotes[Math.floor(Math.random() * state.quotes.length)];
   }
 
-  function showToast(message) {
+  function showToast(message, type) {
     var container = $('#toast-container');
     var toast = document.createElement('div');
-    toast.className = 'toast';
+    toast.className = 'toast' + (type ? ' toast-' + type : '');
+    if (type === 'error') {
+      toast.setAttribute('role', 'alert');
+      toast.setAttribute('aria-live', 'assertive');
+    } else {
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+    }
     toast.innerHTML =
       '<span class="toast-message">' + escapeHtml(message) + '</span>' +
       '<button class="toast-close" aria-label="Close">&times;</button>';
@@ -198,16 +284,28 @@
 
   // ========== TABS / NAVIGATION ==========
   function switchView(viewId) {
+    // Session is persisted — switching tabs loses nothing
+    _doSwitchView(viewId);
+  }
+
+  function _doSwitchView(viewId) {
     $$('.view').forEach(function (v) { v.classList.remove('active'); });
-    $$('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    $$('.tab-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
 
     var view = $('#view-' + viewId);
     if (view) view.classList.add('active');
 
     var tab = document.querySelector('.tab-btn[data-view="' + viewId + '"]');
-    if (tab) tab.classList.add('active');
+    if (tab) {
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+    }
 
     // Render view-specific content
+    if (viewId === 'practice') showResumeIfNeeded();
     if (viewId === 'stats') renderStats();
     if (viewId === 'bank') renderBank();
     if (viewId === 'settings') renderSettings();
@@ -258,18 +356,34 @@
       topicFilter = $('#topic-filter-select').value || null;
     }
 
+    // Warn if Weak Areas selected with no history
+    if (mode === 'weak' && Object.keys(state.history).length === 0) {
+      showModal('No Data Yet', '<p>Weak Areas mode needs practice history to identify your weak topics. Try a Daily Mix session first!</p>', [
+        { label: 'OK', class: 'btn-primary', action: hideModal }
+      ]);
+      return;
+    }
+
     var count = state.settings.questionsPerDay;
     var questions = selectQuestions(mode, topicFilter, count);
 
     if (questions.length === 0) {
-      showToast('No questions available for this mode. Try a different mode or add more questions.');
+      showToast('No questions available for this mode. Try a different mode or add more questions.', 'info');
       return;
     }
+
+    // Persist to daily
+    var daily = state.daily;
+    daily.sessionQuestionIds = questions.map(function (q) { return q.id; });
+    daily.answersById = {};
+    daily.markedById = {};
+    daily.currentIndex = 0;
+    daily.completedAtISO = null;
+    save('fnp:daily', daily);
 
     state.session = {
       questions: questions,
       currentIndex: 0,
-      answers: [],
       correctCount: 0,
       mode: mode
     };
@@ -280,13 +394,15 @@
     $('#practice-summary').classList.add('hidden');
     $('#practice-session').classList.remove('hidden');
 
-    renderQuestion();
+    navigateTo(0);
   }
 
   function selectQuestions(mode, topicFilter, count) {
     var pool = (state.questionBank || []).slice();
     var history = state.history;
-    var dailyIds = state.daily ? state.daily.questionIds : [];
+    var now = new Date();
+    var nowISO = now.toISOString();
+    var threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
     // Filter by topic
     if (topicFilter) {
@@ -301,31 +417,16 @@
       });
     }
 
-    // Remove today's already-seen questions
-    pool = pool.filter(function (q) {
-      return dailyIds.indexOf(q.id) === -1;
-    });
-
     if (mode === 'flagged') {
       pool = pool.filter(function (q) {
         var h = history[q.id];
         return h && h.flagged;
       });
-      // Also include flagged from today's pool
-      var flaggedFromDaily = (state.questionBank || []).filter(function (q) {
-        var h = history[q.id];
-        return h && h.flagged && dailyIds.indexOf(q.id) !== -1;
-      });
-      // Add back flagged that were filtered by daily
-      flaggedFromDaily.forEach(function (q) {
-        if (!pool.find(function (p) { return p.id === q.id; })) {
-          pool.push(q);
-        }
-      });
+      shuffleArray(pool);
+      return pool.slice(0, count);
     }
 
     if (mode === 'weak') {
-      // Prioritize questions with worst accuracy
       pool.sort(function (a, b) {
         var ha = history[a.id];
         var hb = history[b.id];
@@ -336,44 +437,65 @@
       return pool.slice(0, count);
     }
 
-    // Smart selection for daily mode
-    var incorrect = [];
-    var unseen = [];
-    var seenNotMastered = [];
+    // 5-Bucket selection for daily/topic modes
+    var repractice = [];     // Bucket 1: forceRepracticeUntilISO > now
+    var recentWrong = [];    // Bucket 2: incorrect within 72h
+    var unseen = [];         // Bucket 3: no history or timesSeen === 0
+    var seenNotMemo = [];    // Bucket 4: seen, not memorized
+    var memorized = [];      // Bucket 5: memorized (lowest priority)
 
     pool.forEach(function (q) {
       var h = history[q.id];
-      if (!h) {
+
+      if (!h || h.timesSeen === 0) {
         unseen.push(q);
-      } else if (h.timesWrong > 0 && !h.mastered) {
-        incorrect.push(q);
-      } else if (!h.mastered) {
-        seenNotMastered.push(q);
+        return;
       }
+
+      // Repractice always goes to bucket 1
+      if (h.forceRepracticeUntilISO && h.forceRepracticeUntilISO > nowISO) {
+        repractice.push(q);
+        return;
+      }
+
+      // Memorized
+      if (h.memorized) {
+        memorized.push(q);
+        return;
+      }
+
+      // Incorrect within 72h
+      if (h.timesWrong > 0 && h.lastSeenISO && h.lastSeenISO >= threeDaysAgo) {
+        recentWrong.push(q);
+        return;
+      }
+
+      // Seen, not memorized
+      seenNotMemo.push(q);
     });
 
-    // Sort incorrect by error rate desc
-    incorrect.sort(function (a, b) {
-      var ha = history[a.id];
-      var hb = history[b.id];
-      return (hb.timesWrong / hb.timesSeen) - (ha.timesWrong / ha.timesSeen);
-    });
-
-    // Sort seenNotMastered by oldest seen first
-    seenNotMastered.sort(function (a, b) {
+    // Sort seenNotMemo by oldest-seen first
+    seenNotMemo.sort(function (a, b) {
       var ha = history[a.id];
       var hb = history[b.id];
       return (ha.lastSeenISO || '').localeCompare(hb.lastSeenISO || '');
     });
 
-    // Shuffle within buckets for variety
-    shuffleArray(incorrect);
+    // Shuffle within each bucket for variety
+    shuffleArray(repractice);
+    shuffleArray(recentWrong);
     shuffleArray(unseen);
-    shuffleArray(seenNotMastered);
+    shuffleArray(seenNotMemo);
+    shuffleArray(memorized);
 
-    // But keep general priority: incorrect first, then unseen, then seen
+    // Pull from buckets in priority order
     var selected = [];
-    var buckets = [incorrect, unseen, seenNotMastered];
+    var buckets = [repractice, recentWrong, unseen, seenNotMemo];
+
+    // Only include memorized bucket if not excluded
+    if (!state.settings.excludeMemorized) {
+      buckets.push(memorized);
+    }
 
     for (var bi = 0; bi < buckets.length && selected.length < count; bi++) {
       var bucket = buckets[bi];
@@ -385,6 +507,66 @@
     return selected;
   }
 
+  // ========== SESSION NAVIGATION ==========
+  function navigateTo(index) {
+    var s = state.session;
+    if (!s) return;
+    if (index < 0) index = 0;
+    if (index >= s.questions.length) index = s.questions.length - 1;
+    s.currentIndex = index;
+    state.daily.currentIndex = index;
+    save('fnp:daily', state.daily);
+    renderQuestion();
+  }
+
+  function renderPips() {
+    var s = state.session;
+    if (!s) return;
+    var container = $('#pip-container');
+    if (!container) return;
+    container.innerHTML = '';
+    var daily = state.daily;
+
+    for (var i = 0; i < s.questions.length; i++) {
+      var pip = document.createElement('button');
+      pip.className = 'pip';
+      pip.setAttribute('aria-label', 'Question ' + (i + 1));
+      var qid = s.questions[i].id;
+      var answer = daily.answersById[qid];
+
+      if (answer && answer.isSubmitted) {
+        if (answer.isCorrect) {
+          pip.classList.add('pip-correct');
+        } else {
+          pip.classList.add('pip-incorrect');
+        }
+        // Check if memorized
+        var hist = state.history[qid];
+        if (hist && hist.memorized) {
+          pip.classList.add('pip-memorized');
+        }
+      } else if (answer && answer.selectedIndex !== null && answer.selectedIndex !== undefined) {
+        pip.classList.add('pip-selected');
+      }
+
+      if (i === s.currentIndex) {
+        pip.classList.add('pip-current');
+      }
+
+      (function (idx) {
+        pip.addEventListener('click', function () { navigateTo(idx); });
+      })(i);
+
+      container.appendChild(pip);
+    }
+
+    // Update prev/next button states
+    var prevBtn = $('#prev-btn');
+    var nextNavBtn = $('#next-nav-btn');
+    if (prevBtn) prevBtn.disabled = (s.currentIndex <= 0);
+    if (nextNavBtn) nextNavBtn.disabled = (s.currentIndex >= s.questions.length - 1);
+  }
+
   function renderQuestion() {
     var s = state.session;
     if (!s || s.currentIndex >= s.questions.length) {
@@ -393,12 +575,28 @@
     }
 
     var q = s.questions[s.currentIndex];
-    state.selectedChoice = null;
+    var qid = q.id;
+    var daily = state.daily;
+    var answerEntry = daily.answersById[qid];
+    var isSubmitted = answerEntry && answerEntry.isSubmitted;
 
-    // Progress
+    state.selectedChoice = (answerEntry && answerEntry.selectedIndex !== null && answerEntry.selectedIndex !== undefined) ? answerEntry.selectedIndex : null;
+
+    // Progress — count submitted answers
+    var submittedCount = 0;
+    var correctCount = 0;
+    Object.keys(daily.answersById).forEach(function (id) {
+      var a = daily.answersById[id];
+      if (a.isSubmitted) {
+        submittedCount++;
+        if (a.isCorrect) correctCount++;
+      }
+    });
+    s.correctCount = correctCount;
+
     $('#q-counter').textContent = 'Question ' + (s.currentIndex + 1) + ' of ' + s.questions.length;
-    $('#q-score').textContent = s.correctCount + ' correct';
-    var pct = ((s.currentIndex) / s.questions.length) * 100;
+    $('#q-score').textContent = correctCount + ' correct';
+    var pct = (submittedCount / s.questions.length) * 100;
     $('#progress-fill').style.width = pct + '%';
 
     // Topic badge
@@ -415,28 +613,96 @@
       btn.className = 'choice-btn';
       btn.textContent = choice;
       btn.setAttribute('data-index', i);
-      btn.addEventListener('click', function () {
-        handleChoiceClick(i);
-      });
+
+      if (isSubmitted) {
+        // Locked state — show results
+        btn.disabled = true;
+        if (i === q.answer) {
+          btn.classList.add('correct');
+          btn.insertAdjacentHTML('beforeend', '<span class="choice-icon">\u2713</span>');
+        }
+        if (i === answerEntry.selectedIndex && !answerEntry.isCorrect) {
+          btn.classList.add('incorrect');
+          btn.insertAdjacentHTML('beforeend', '<span class="choice-icon">\u2717</span>');
+        }
+      } else {
+        // Active state
+        if (state.selectedChoice === i) {
+          btn.classList.add('selected');
+        }
+        btn.addEventListener('click', function () {
+          handleChoiceClick(i);
+        });
+      }
+
       choicesEl.appendChild(btn);
     });
 
-    // Reset UI
-    $('#submit-btn').disabled = true;
-    $('#submit-btn').classList.remove('hidden');
-    $('#feedback-area').classList.add('hidden');
-    $('#rationale-box').classList.add('hidden');
-    $('#rationale-toggle').textContent = 'Show Rationale ▼';
+    // Submit button / feedback area
+    if (isSubmitted) {
+      $('#submit-btn').classList.add('hidden');
+      $('#feedback-area').classList.remove('hidden');
+      $('#rationale-box').textContent = q.rationale || 'No rationale available.';
+      $('#rationale-box').classList.add('hidden');
+      $('#rationale-toggle').textContent = 'Show Rationale \u25BC';
+      // Initialize learning controls
+      initLearningControls(qid);
+    } else {
+      $('#submit-btn').disabled = (state.selectedChoice === null);
+      $('#submit-btn').classList.remove('hidden');
+      $('#feedback-area').classList.add('hidden');
+      $('#rationale-box').classList.add('hidden');
+      $('#rationale-toggle').textContent = 'Show Rationale \u25BC';
+    }
 
     // Update flag button
-    var hist = state.history[q.id];
+    var hist = state.history[qid];
     $('#flag-btn').textContent = (hist && hist.flagged) ? 'Unflag' : 'Flag';
+
+    // Render navigation pips
+    renderPips();
+  }
+
+  function initLearningControls(qid) {
+    var hist = state.history[qid];
+    var memorizedToggle = $('#memorized-toggle');
+    var backBtn = $('#back-into-mix-btn');
+
+    if (memorizedToggle) {
+      memorizedToggle.checked = (hist && hist.memorized) || false;
+    }
+
+    if (backBtn) {
+      var isRepractice = hist && hist.forceRepracticeUntilISO && new Date(hist.forceRepracticeUntilISO) > new Date();
+      if (isRepractice) {
+        backBtn.textContent = 'Remove from Mix';
+        backBtn.classList.add('back-into-mix-active');
+      } else {
+        backBtn.textContent = 'Back Into Mix';
+        backBtn.classList.remove('back-into-mix-active');
+      }
+    }
   }
 
   function handleChoiceClick(index) {
-    if (state.session.answers[state.session.currentIndex] !== undefined) return; // Already answered
+    var s = state.session;
+    if (!s) return;
+    var q = s.questions[s.currentIndex];
+    var qid = q.id;
+
+    // If already submitted, ignore
+    var existing = state.daily.answersById[qid];
+    if (existing && existing.isSubmitted) return;
 
     state.selectedChoice = index;
+
+    // Persist selection
+    state.daily.answersById[qid] = {
+      selectedIndex: index,
+      isSubmitted: false,
+      isCorrect: null
+    };
+    save('fnp:daily', state.daily);
 
     // Update UI
     $$('.choice-btn').forEach(function (btn) {
@@ -453,50 +719,87 @@
 
     var s = state.session;
     var q = s.questions[s.currentIndex];
+    var qid = q.id;
     var chosen = state.selectedChoice;
+    var daily = state.daily;
+
+    // Guard: prevent double-count
+    var entry = daily.answersById[qid];
+    if (entry && entry.isSubmitted) return;
+
     var isCorrect = chosen === q.answer;
 
-    // Record answer
-    s.answers[s.currentIndex] = chosen;
-    if (isCorrect) s.correctCount++;
+    // Update daily answer entry
+    daily.answersById[qid] = {
+      selectedIndex: chosen,
+      isSubmitted: true,
+      isCorrect: isCorrect
+    };
+
+    // Check if all questions submitted
+    var allSubmitted = true;
+    for (var i = 0; i < s.questions.length; i++) {
+      var a = daily.answersById[s.questions[i].id];
+      if (!a || !a.isSubmitted) { allSubmitted = false; break; }
+    }
+    if (allSubmitted) {
+      daily.completedAtISO = new Date().toISOString();
+    }
+
+    save('fnp:daily', daily);
 
     // Update history
-    if (!state.history[q.id]) {
-      state.history[q.id] = {
+    if (!state.history[qid]) {
+      state.history[qid] = {
         timesSeen: 0,
         timesCorrect: 0,
         timesWrong: 0,
         lastSeenISO: null,
         flagged: false,
-        mastered: false
+        mastered: false,
+        memorized: false,
+        forceRepracticeUntilISO: null
       };
     }
-    var h = state.history[q.id];
+    var h = state.history[qid];
     h.timesSeen++;
     if (isCorrect) h.timesCorrect++;
     else h.timesWrong++;
-    h.lastSeenISO = todayISO();
-    save('fnp:history', state.history);
+    h.lastSeenISO = getTodayISODate();
+    saveHistory();
 
-    // Update daily
-    state.daily.attempted++;
-    if (isCorrect) state.daily.correct++;
-    if (state.daily.questionIds.indexOf(q.id) === -1) {
-      state.daily.questionIds.push(q.id);
-    }
-    save('fnp:daily', state.daily);
+    // Update session correctCount
+    if (isCorrect) s.correctCount++;
+
     updateDailyPill();
 
     // Show feedback
     $$('.choice-btn').forEach(function (btn, i) {
       btn.disabled = true;
-      if (i === q.answer) btn.classList.add('correct');
-      if (i === chosen && !isCorrect) btn.classList.add('incorrect');
+      if (i === q.answer) {
+        btn.classList.add('correct');
+        btn.insertAdjacentHTML('beforeend', '<span class="choice-icon">\u2713</span>');
+      }
+      if (i === chosen && !isCorrect) {
+        btn.classList.add('incorrect');
+        btn.insertAdjacentHTML('beforeend', '<span class="choice-icon">\u2717</span>');
+      }
     });
 
     $('#submit-btn').classList.add('hidden');
     $('#feedback-area').classList.remove('hidden');
     $('#rationale-box').textContent = q.rationale || 'No rationale available.';
+
+    // Initialize learning controls
+    initLearningControls(qid);
+
+    // Update pips
+    renderPips();
+
+    // If all complete, auto-end after a brief pause
+    if (allSubmitted) {
+      setTimeout(function () { endSession(); }, 800);
+    }
   }
 
   function toggleRationale() {
@@ -512,8 +815,8 @@
   }
 
   function nextQuestion() {
-    state.session.currentIndex++;
-    renderQuestion();
+    if (!state.session) return;
+    navigateTo(state.session.currentIndex + 1);
   }
 
   function toggleFlagCurrent() {
@@ -523,11 +826,12 @@
     if (!state.history[q.id]) {
       state.history[q.id] = {
         timesSeen: 0, timesCorrect: 0, timesWrong: 0,
-        lastSeenISO: null, flagged: false, mastered: false
+        lastSeenISO: null, flagged: false, mastered: false,
+        memorized: false, forceRepracticeUntilISO: null
       };
     }
     state.history[q.id].flagged = !state.history[q.id].flagged;
-    save('fnp:history', state.history);
+    saveHistory();
     $('#flag-btn').textContent = state.history[q.id].flagged ? 'Unflag' : 'Flag';
     showToast(state.history[q.id].flagged ? 'Question flagged for review' : 'Flag removed');
   }
@@ -535,16 +839,31 @@
   function endSession() {
     var s = state.session;
     if (!s) return;
+    var daily = state.daily;
 
+    // Count from daily.answersById
     var total = s.questions.length;
-    var correct = s.correctCount;
+    var correct = 0;
+    s.questions.forEach(function (q) {
+      var a = daily.answersById[q.id];
+      if (a && a.isSubmitted && a.isCorrect) correct++;
+    });
+
     var pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    // Mark complete
+    if (!daily.completedAtISO) {
+      daily.completedAtISO = new Date().toISOString();
+      save('fnp:daily', daily);
+    }
 
     // Summary UI
     $('#practice-session').classList.add('hidden');
     $('#practice-summary').classList.remove('hidden');
 
-    $('#summary-score').textContent = pct + '%';
+    var scoreEl = $('#summary-score');
+    scoreEl.textContent = pct + '%';
+    scoreEl.style.color = pct >= 80 ? 'var(--correct)' : pct >= 60 ? 'var(--warning)' : 'var(--incorrect)';
     $('#summary-quote').textContent = randomQuote();
 
     var statsHtml =
@@ -557,19 +876,21 @@
     // Show review missed button if any wrong
     var missedBtn = $('#review-missed-btn');
     if (total - correct > 0) {
-      missedBtn.style.display = 'block';
+      missedBtn.classList.remove('hidden');
     } else {
-      missedBtn.style.display = 'none';
+      missedBtn.classList.add('hidden');
     }
   }
 
   function reviewMissed() {
     var s = state.session;
     if (!s) return;
+    var daily = state.daily;
 
     var missed = [];
-    s.questions.forEach(function (q, i) {
-      if (s.answers[i] !== q.answer) {
+    s.questions.forEach(function (q) {
+      var a = daily.answersById[q.id];
+      if (a && a.isSubmitted && !a.isCorrect) {
         missed.push(q);
       }
     });
@@ -579,10 +900,17 @@
       return;
     }
 
+    // Set up a new daily session for review
+    daily.sessionQuestionIds = missed.map(function (q) { return q.id; });
+    daily.answersById = {};
+    daily.markedById = {};
+    daily.currentIndex = 0;
+    daily.completedAtISO = null;
+    save('fnp:daily', daily);
+
     state.session = {
       questions: missed,
       currentIndex: 0,
-      answers: [],
       correctCount: 0,
       mode: 'review'
     };
@@ -593,7 +921,7 @@
     $('#practice-summary').classList.add('hidden');
     $('#practice-session').classList.remove('hidden');
 
-    renderQuestion();
+    navigateTo(0);
   }
 
   function backToStart() {
@@ -601,12 +929,30 @@
     $('#practice-session').classList.add('hidden');
     $('#practice-summary').classList.add('hidden');
     $('#practice-start').classList.remove('hidden');
+    $('#resume-session-btn').classList.add('hidden');
+  }
+
+  function showResumeIfNeeded() {
+    // Resume is now automatic in init() — hide the old button
+    var resumeBtn = $('#resume-session-btn');
+    if (resumeBtn) resumeBtn.classList.add('hidden');
   }
 
   // ========== STATS ==========
   function renderStats() {
     var history = state.history;
     var bank = state.questionBank || [];
+
+    // Empty state
+    if (Object.keys(history).length === 0) {
+      $('#stats-overview').innerHTML =
+        '<div class="stat-card full-width" style="padding:32px 16px;"><div class="empty-state-icon">📊</div>' +
+        '<div style="font-size:1.1rem;font-weight:600;margin-bottom:4px;">No stats yet</div>' +
+        '<div style="color:var(--text-muted);font-size:0.9rem;">Complete your first practice session to see your progress here.</div></div>';
+      $('#streak-card').innerHTML = '';
+      $('#topic-stats-body').innerHTML = '';
+      return;
+    }
 
     // Overall stats
     var totalSeen = 0;
@@ -836,7 +1182,7 @@
       state.history[id] = { timesSeen: 0, timesCorrect: 0, timesWrong: 0, lastSeenISO: null, flagged: false, mastered: false };
     }
     state.history[id].flagged = !state.history[id].flagged;
-    save('fnp:history', state.history);
+    saveHistory();
     renderBankList();
   }
 
@@ -845,7 +1191,7 @@
       state.history[id] = { timesSeen: 0, timesCorrect: 0, timesWrong: 0, lastSeenISO: null, flagged: false, mastered: false };
     }
     state.history[id].mastered = !state.history[id].mastered;
-    save('fnp:history', state.history);
+    saveHistory();
     renderBankList();
   }
 
@@ -947,7 +1293,7 @@
             state.questionBank = (state.questionBank || []).filter(function (q) { return q.id !== id; });
             save('fnp:questionBank', state.questionBank);
             delete state.history[id];
-            save('fnp:history', state.history);
+            saveHistory();
             hideModal();
             renderBank();
             showToast('Question deleted.');
@@ -1066,7 +1412,7 @@
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'fnp-questions-' + todayISO() + '.json';
+    a.download = 'fnp-questions-' + getTodayISODate() + '.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1079,6 +1425,7 @@
     $('#goal-value').textContent = state.settings.questionsPerDay;
     $('#theme-switch').checked = state.settings.theme === 'dark';
     $('#exclude-mastered-switch').checked = state.settings.excludeMastered;
+    $('#exclude-memorized-switch').checked = state.settings.excludeMemorized || false;
   }
 
   function changeGoal(delta) {
@@ -1100,16 +1447,10 @@
         { label: 'Cancel', class: 'btn-secondary', action: hideModal },
         {
           label: 'Reset', class: 'btn-danger', action: function () {
-            state.daily = {
-              date: todayISO(),
-              goal: state.settings.questionsPerDay,
-              attempted: 0,
-              correct: 0,
-              questionIds: [],
-              currentIndex: 0,
-              answers: []
-            };
+            state.daily = createFreshDaily();
             save('fnp:daily', state.daily);
+            state.session = null;
+            backToStart();
             updateDailyPill();
             hideModal();
             showToast('Today\'s progress has been reset.');
@@ -1128,19 +1469,13 @@
         {
           label: 'Reset Stats', class: 'btn-danger', action: function () {
             state.history = {};
-            save('fnp:history', state.history);
-            state.usage = { lastOpenISODate: todayISO(), streakCount: 1, totalDaysUsed: 1, firstOpenTimestamps: [] };
+            saveHistory();
+            state.usage = { lastOpenISODate: getTodayISODate(), streakCount: 1, totalDaysUsed: 1, firstOpenTimestamps: [] };
             save('fnp:usage', state.usage);
-            state.daily = {
-              date: todayISO(),
-              goal: state.settings.questionsPerDay,
-              attempted: 0,
-              correct: 0,
-              questionIds: [],
-              currentIndex: 0,
-              answers: []
-            };
+            state.daily = createFreshDaily();
             save('fnp:daily', state.daily);
+            state.session = null;
+            backToStart();
             updateDailyPill();
             hideModal();
             showToast('All statistics have been reset.');
@@ -1173,6 +1508,9 @@
   }
 
   // ========== MODAL ==========
+  var _modalEscHandler = null;
+  var _modalTabHandler = null;
+
   function showModal(title, bodyHtml, buttons) {
     var overlay = $('#modal-overlay');
     var content = $('#modal-content');
@@ -1194,6 +1532,33 @@
 
     overlay.classList.remove('hidden');
 
+    // Auto-focus first focusable element
+    var firstFocusable = content.querySelector('button, input, textarea, select, [tabindex]');
+    if (firstFocusable) firstFocusable.focus();
+
+    // Escape key to close
+    _modalEscHandler = function (e) {
+      if (e.key === 'Escape') {
+        hideModal();
+      }
+    };
+    document.addEventListener('keydown', _modalEscHandler);
+
+    // Focus trap
+    _modalTabHandler = function (e) {
+      if (e.key !== 'Tab') return;
+      var focusable = content.querySelectorAll('button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length === 0) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', _modalTabHandler);
+
     // Close on backdrop click
     overlay.addEventListener('click', function handler(e) {
       if (e.target === overlay) {
@@ -1205,6 +1570,14 @@
 
   function hideModal() {
     $('#modal-overlay').classList.add('hidden');
+    if (_modalEscHandler) {
+      document.removeEventListener('keydown', _modalEscHandler);
+      _modalEscHandler = null;
+    }
+    if (_modalTabHandler) {
+      document.removeEventListener('keydown', _modalTabHandler);
+      _modalTabHandler = null;
+    }
   }
 
   // ========== UTILITIES ==========
@@ -1281,10 +1654,70 @@
     // Review missed
     $('#review-missed-btn').addEventListener('click', reviewMissed);
 
-    // Bank search
+    // Session navigation
+    $('#prev-btn').addEventListener('click', function () {
+      if (state.session) navigateTo(state.session.currentIndex - 1);
+    });
+    $('#next-nav-btn').addEventListener('click', function () {
+      if (state.session) navigateTo(state.session.currentIndex + 1);
+    });
+
+    // Learning controls
+    $('#memorized-toggle').addEventListener('change', function () {
+      var s = state.session;
+      if (!s) return;
+      var qid = s.questions[s.currentIndex].id;
+      if (!state.history[qid]) {
+        state.history[qid] = {
+          timesSeen: 0, timesCorrect: 0, timesWrong: 0,
+          lastSeenISO: null, flagged: false, mastered: false,
+          memorized: false, forceRepracticeUntilISO: null
+        };
+      }
+      state.history[qid].memorized = this.checked;
+      if (this.checked) {
+        state.history[qid].forceRepracticeUntilISO = null;
+      }
+      saveHistory();
+      renderPips();
+      initLearningControls(qid);
+      showToast(this.checked ? 'Marked as memorized' : 'Removed memorized mark');
+    });
+
+    $('#back-into-mix-btn').addEventListener('click', function () {
+      var s = state.session;
+      if (!s) return;
+      var qid = s.questions[s.currentIndex].id;
+      if (!state.history[qid]) {
+        state.history[qid] = {
+          timesSeen: 0, timesCorrect: 0, timesWrong: 0,
+          lastSeenISO: null, flagged: false, mastered: false,
+          memorized: false, forceRepracticeUntilISO: null
+        };
+      }
+      var h = state.history[qid];
+      var isRepractice = h.forceRepracticeUntilISO && new Date(h.forceRepracticeUntilISO) > new Date();
+      if (isRepractice) {
+        // Remove from mix
+        h.forceRepracticeUntilISO = null;
+        showToast('Removed from repractice mix');
+      } else {
+        // Back into mix: +24h
+        h.memorized = false;
+        h.forceRepracticeUntilISO = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+        showToast('Added back into practice mix for 24h');
+      }
+      saveHistory();
+      renderPips();
+      initLearningControls(qid);
+    });
+
+    // Bank search (debounced)
+    var _bankSearchTimer = null;
     $('#bank-search').addEventListener('input', function (e) {
       bankFilterState.search = e.target.value;
-      renderBankList();
+      clearTimeout(_bankSearchTimer);
+      _bankSearchTimer = setTimeout(renderBankList, 150);
     });
 
     // Settings
@@ -1292,6 +1725,10 @@
     $('#goal-plus').addEventListener('click', function () { changeGoal(1); });
     $('#exclude-mastered-switch').addEventListener('change', function () {
       state.settings.excludeMastered = this.checked;
+      save('fnp:settings', state.settings);
+    });
+    $('#exclude-memorized-switch').addEventListener('change', function () {
+      state.settings.excludeMemorized = this.checked;
       save('fnp:settings', state.settings);
     });
 
