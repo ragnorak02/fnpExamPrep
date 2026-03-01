@@ -1220,6 +1220,15 @@ body {
   flex: 1;
 }
 
+/* ========== DEBUG PANEL ========== */
+.debug-panel { padding: 12px 16px; border-top: 1px solid var(--border); font-family: 'SF Mono','Fira Code','Consolas',monospace; font-size: 0.78rem; line-height: 1.6; color: var(--text-secondary); }
+.debug-panel .debug-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(128,128,128,0.1); }
+.debug-panel .debug-row:last-child { border-bottom: none; }
+.debug-panel .debug-key { color: var(--text-muted); font-weight: 500; }
+.debug-panel .debug-value { color: var(--accent); font-weight: 600; text-align: right; }
+.debug-panel .debug-section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px; font-weight: 700; }
+.debug-panel .debug-section-title:first-child { margin-top: 0; }
+
 /* ========== MISC ========== */
 .hidden {
   display: none !important;

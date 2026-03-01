@@ -1,6 +1,27 @@
 (function () {
   'use strict';
 
+  // ========== APP META ==========
+  var APP_VERSION = '1.0.0';
+  var APP_ENV = (function () {
+    var host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host === '') return 'development';
+    if (host.indexOf('.github.io') !== -1) return 'production';
+    return 'staging';
+  })();
+  var APP_CONFIG = {
+    apiBaseUrl: APP_ENV === 'production'
+      ? 'https://PLACEHOLDER.supabase.co/functions/v1'
+      : 'http://localhost:54321/functions/v1',
+    debug: APP_ENV !== 'production'
+  };
+
+  function debugLog() {
+    if (APP_CONFIG.debug) {
+      console.log.apply(console, ['[FNP]'].concat(Array.prototype.slice.call(arguments)));
+    }
+  }
+
   // ========== STORAGE ==========
   function safeParse(key, fallback) {
     try {
@@ -74,6 +95,8 @@
 
   // ========== INIT ==========
   async function init() {
+    debugLog('Starting FNP Exam Prep', APP_VERSION, '(' + APP_ENV + ')');
+
     // Apply theme immediately
     applyTheme();
 
@@ -1426,6 +1449,92 @@
     $('#theme-switch').checked = state.settings.theme === 'dark';
     $('#exclude-mastered-switch').checked = state.settings.excludeMastered;
     $('#exclude-memorized-switch').checked = state.settings.excludeMemorized || false;
+    renderDebugPanel();
+  }
+
+  function renderDebugPanel() {
+    var panel = $('#debug-panel');
+    if (!panel || panel.classList.contains('hidden')) return;
+
+    var bank = state.questionBank || [];
+    var histKeys = Object.keys(state.history);
+    var attempted = histKeys.filter(function (k) { return state.history[k].timesSeen > 0; }).length;
+    var mastered = histKeys.filter(function (k) { return state.history[k].mastered; }).length;
+    var memorized = histKeys.filter(function (k) { return state.history[k].memorized; }).length;
+    var flagged = histKeys.filter(function (k) { return state.history[k].flagged; }).length;
+
+    var daily = state.daily || {};
+    var answeredToday = daily.answersById ? Object.keys(daily.answersById).length : 0;
+
+    // Compute localStorage sizes
+    var lsRows = '';
+    var totalBytes = 0;
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      var val = localStorage.getItem(key) || '';
+      var bytes = new Blob([val]).size;
+      totalBytes += bytes;
+      lsRows += '<div class="debug-row"><span class="debug-key">' + key + '</span><span class="debug-value">' + formatBytes(bytes) + '</span></div>';
+    }
+
+    var html = '';
+    // App section
+    html += '<div class="debug-section-title">App</div>';
+    html += debugRow('Version', APP_VERSION);
+    html += debugRow('Environment', APP_ENV);
+    html += debugRow('API Base', APP_CONFIG.apiBaseUrl);
+    // Data section
+    html += '<div class="debug-section-title">Data</div>';
+    html += debugRow('Bank Size', bank.length);
+    html += debugRow('Attempted', attempted);
+    html += debugRow('Mastered', mastered);
+    html += debugRow('Memorized', memorized);
+    html += debugRow('Flagged', flagged);
+    // Daily section
+    html += '<div class="debug-section-title">Daily</div>';
+    html += debugRow('Day ISO', daily.isoDate || '—');
+    html += debugRow('Session Qs', (daily.sessionQuestionIds || []).length);
+    html += debugRow('Answered Today', answeredToday);
+    html += debugRow('Goal', state.settings.questionsPerDay);
+    // Usage section
+    html += '<div class="debug-section-title">Usage</div>';
+    html += debugRow('Streak', state.usage.streakCount);
+    html += debugRow('Total Days', state.usage.totalDaysUsed);
+    html += debugRow('Last Open', state.usage.lastOpenISODate || '—');
+    // LocalStorage section
+    html += '<div class="debug-section-title">LocalStorage</div>';
+    html += lsRows;
+    html += debugRow('Total', formatBytes(totalBytes));
+    // Server placeholder
+    html += '<div class="debug-section-title">Server (Phase 2+)</div>';
+    html += debugRow('Auth', '—');
+    html += debugRow('Tier', '—');
+    html += debugRow('Quota', '—');
+
+    panel.innerHTML = html;
+  }
+
+  function debugRow(key, value) {
+    return '<div class="debug-row"><span class="debug-key">' + key + '</span><span class="debug-value">' + value + '</span></div>';
+  }
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  function toggleDebugPanel() {
+    var panel = $('#debug-panel');
+    var btn = $('#debug-toggle-btn');
+    if (panel.classList.contains('hidden')) {
+      panel.classList.remove('hidden');
+      btn.textContent = 'Hide';
+      renderDebugPanel();
+    } else {
+      panel.classList.add('hidden');
+      btn.textContent = 'Show';
+    }
   }
 
   function changeGoal(delta) {
@@ -1740,6 +1849,9 @@
     $('#reset-today-btn').addEventListener('click', resetToday);
     $('#reset-stats-btn').addEventListener('click', resetStats);
     $('#reset-all-btn').addEventListener('click', resetEverything);
+
+    // Debug panel
+    $('#debug-toggle-btn').addEventListener('click', toggleDebugPanel);
   }
 
   // ========== START ==========
