@@ -177,11 +177,11 @@ Exit: Auth + DB working with RLS.
 
 ## 🔵 PHASE 3 — Authority Functions
 
-- [ ] Implement GET /me
-- [ ] Implement POST /usage/increment
-- [ ] Implement POST /entitlement/sync
-- [ ] Server computes dayISO
-- [ ] Prevent negative or excessive deltas
+- [x] Implement GET /me
+- [x] Implement POST /usage/increment
+- [x] Implement POST /entitlement/sync
+- [x] Server computes dayISO
+- [x] Prevent negative or excessive deltas
 
 Exit: Server enforces quota reliably.
 
