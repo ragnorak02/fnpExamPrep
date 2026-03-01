@@ -10,8 +10,12 @@
     return 'staging';
   })();
   var APP_CONFIG = {
+    supabaseUrl: APP_ENV === 'production'
+      ? 'https://xzfkvhfgxyqasqvlidvd.supabase.co'
+      : 'http://localhost:54321',
+    supabaseAnonKey: 'sb_publishable_YI1Z0Lmj2w_EAthVguxJTg_ZPkWqklc',
     apiBaseUrl: APP_ENV === 'production'
-      ? 'https://PLACEHOLDER.supabase.co/functions/v1'
+      ? 'https://xzfkvhfgxyqasqvlidvd.supabase.co/functions/v1'
       : 'http://localhost:54321/functions/v1',
     debug: APP_ENV !== 'production'
   };
@@ -1505,9 +1509,10 @@
     html += '<div class="debug-section-title">LocalStorage</div>';
     html += lsRows;
     html += debugRow('Total', formatBytes(totalBytes));
-    // Server placeholder
-    html += '<div class="debug-section-title">Server (Phase 2+)</div>';
-    html += debugRow('Auth', '—');
+    // Server section
+    html += '<div class="debug-section-title">Server</div>';
+    html += debugRow('Supabase URL', APP_CONFIG.supabaseUrl);
+    html += debugRow('Auth', 'Not connected');
     html += debugRow('Tier', '—');
     html += debugRow('Quota', '—');
 

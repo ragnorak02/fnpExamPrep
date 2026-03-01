@@ -1,0 +1,9 @@
+-- seed.sql
+-- For local development with Supabase CLI only.
+-- Production users are created via Auth signup, which auto-creates profile rows.
+--
+-- To use locally:
+--   1. Start Supabase locally: supabase start
+--   2. Run migrations: supabase db reset
+--   3. Create a test user via the Auth UI at http://localhost:54323
+--   4. Verify the profiles row was auto-created with tier='free', daily_quota=10

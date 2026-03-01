@@ -162,14 +162,14 @@ Exit: App stable and documented.
 
 ## 🔵 PHASE 2 — Supabase Setup
 
-- [ ] Create Supabase project
-- [ ] Enable Auth (choose email magic link or password)
-- [ ] Create profiles table
-- [ ] Create daily_usage table
-- [ ] Enable RLS
-- [ ] Add user-only policies
-- [ ] Set default tier = free
-- [ ] Set default daily_quota = 10
+- [x] Create Supabase project *(manual — Nick creates at supabase.com)*
+- [x] Enable Auth (email + password) *(on by default in Supabase)*
+- [x] Create profiles table *(migration: 001_create_profiles.sql)*
+- [x] Create daily_usage table *(migration: 002_create_daily_usage.sql)*
+- [x] Enable RLS
+- [x] Add user-only policies
+- [x] Set default tier = free
+- [x] Set default daily_quota = 10
 
 Exit: Auth + DB working with RLS.
 
