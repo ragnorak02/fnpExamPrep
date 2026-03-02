@@ -15,6 +15,12 @@
     <span class="daily-progress-pill" id="daily-pill">
       <span class="progress-count" id="daily-count">0</span>/<span id="daily-goal">5</span> today
     </span>
+    <button class="header-icon-btn" id="account-btn" aria-label="Account">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </button>
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
   </header>
 
@@ -32,6 +38,9 @@
       <div id="practice-start" class="practice-start">
         <h2>Ready to Practice?</h2>
         <p>Select a mode and start studying</p>
+        <div class="quota-display hidden" id="quota-display">
+          <span id="quota-used">0</span>/<span id="quota-limit">10</span> daily questions used
+        </div>
 
         <div class="mode-selector" id="mode-selector">
           <label class="mode-option selected" data-mode="daily">
@@ -252,6 +261,7 @@
     <div id="modal-content"></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>

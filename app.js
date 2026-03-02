@@ -20,6 +20,16 @@
     debug: APP_ENV !== 'production'
   };
 
+  // ========== SUPABASE CLIENT ==========
+  var _supabase = null;
+  try {
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+      _supabase = supabase.createClient(APP_CONFIG.supabaseUrl, APP_CONFIG.supabaseAnonKey);
+    }
+  } catch (e) {
+    console.warn('[FNP] Supabase client init failed:', e);
+  }
+
   function debugLog() {
     if (APP_CONFIG.debug) {
       console.log.apply(console, ['[FNP]'].concat(Array.prototype.slice.call(arguments)));
@@ -86,11 +96,63 @@
     quotes: [],
     // Session state (not persisted directly)
     session: null,
-    selectedChoice: null
+    selectedChoice: null,
+    // Auth state (populated from /me endpoint)
+    auth: {
+      user: null,
+      tier: 'free',
+      dailyQuota: 10,
+      usedToday: 0,
+      dayISO: null,
+      lastSync: null
+    }
   };
 
   function saveHistory() {
     save('fnp:history', { byId: state.history });
+  }
+
+  // ========== API HELPERS ==========
+  async function apiFetch(endpoint, options) {
+    if (!_supabase) return { error: 'No Supabase client' };
+    try {
+      var authResult = await _supabase.auth.getSession();
+      var session = authResult.data.session;
+      if (!session) return { error: 'Not authenticated' };
+
+      var url = APP_CONFIG.apiBaseUrl + '/' + endpoint;
+      var defaultHeaders = {
+        'Authorization': 'Bearer ' + session.access_token,
+        'apikey': APP_CONFIG.supabaseAnonKey,
+        'Content-Type': 'application/json'
+      };
+      var opts = Object.assign({}, options || {});
+      opts.headers = Object.assign(defaultHeaders, opts.headers || {});
+
+      var res = await fetch(url, opts);
+      var data = await res.json();
+      if (!res.ok) return { error: data.error || 'Request failed' };
+      return { data: data };
+    } catch (e) {
+      debugLog('apiFetch error:', e);
+      return { error: e.message };
+    }
+  }
+
+  async function syncMe() {
+    var result = await apiFetch('me', { method: 'GET' });
+    if (result.error) {
+      debugLog('syncMe failed:', result.error);
+      return false;
+    }
+    var d = result.data;
+    state.auth.tier = d.tier || 'free';
+    state.auth.dailyQuota = d.dailyQuota || 10;
+    state.auth.usedToday = d.usedToday || 0;
+    state.auth.dayISO = d.dayISO || null;
+    state.auth.lastSync = new Date().toISOString();
+    debugLog('syncMe success:', state.auth);
+    return true;
   }
 
   // ========== DOM REFERENCES ==========
@@ -103,6 +165,35 @@
 
     // Apply theme immediately
     applyTheme();
+
+    // Check for existing auth session (non-blocking)
+    if (_supabase) {
+      debugLog('Supabase client initialized');
+      _supabase.auth.onAuthStateChange(function (event, session) {
+        debugLog('Auth state change:', event);
+        if (event === 'SIGNED_OUT' || !session) {
+          state.auth = { user: null, tier: 'free', dailyQuota: 10, usedToday: 0, dayISO: null, lastSync: null };
+          updateAuthUI();
+          updateQuotaDisplay();
+        }
+      });
+      try {
+        var authResult = await _supabase.auth.getSession();
+        var session = authResult.data.session;
+        if (session && session.user) {
+          state.auth.user = { id: session.user.id, email: session.user.email };
+          debugLog('Existing session for', session.user.email);
+          syncMe().then(function () {
+            updateAuthUI();
+            updateQuotaDisplay();
+            renderDebugPanel();
+          });
+        }
+      } catch (e) {
+        debugLog('Auth check failed:', e);
+      }
+      updateAuthUI();
+    }
 
     // Show loading state
     var startBtn = document.querySelector('#start-session-btn');
@@ -1512,9 +1603,10 @@
     // Server section
     html += '<div class="debug-section-title">Server</div>';
     html += debugRow('Supabase URL', APP_CONFIG.supabaseUrl);
-    html += debugRow('Auth', 'Not connected');
-    html += debugRow('Tier', '—');
-    html += debugRow('Quota', '—');
+    html += debugRow('Auth', state.auth.user ? state.auth.user.email : 'Not connected');
+    html += debugRow('Tier', state.auth.user ? state.auth.tier : '—');
+    html += debugRow('Quota', state.auth.user ? (state.auth.usedToday + '/' + state.auth.dailyQuota) : '—');
+    html += debugRow('Last Sync', state.auth.lastSync ? new Date(state.auth.lastSync).toLocaleTimeString() : '—');
 
     panel.innerHTML = html;
   }
@@ -1694,6 +1786,190 @@
     }
   }
 
+  // ========== AUTH UI ==========
+  function showAccountModal() {
+    if (!_supabase) {
+      showToast('Account features not available offline', 'info');
+      return;
+    }
+    if (state.auth.user) {
+      // Logged in: show account info
+      var tierLabel = state.auth.tier === 'premium' ? 'Premium' : 'Free';
+      var quotaInfo = state.auth.usedToday + '/' + state.auth.dailyQuota + ' questions used today';
+      var bodyHtml =
+        '<div style="margin-bottom: 12px;">' +
+          '<div style="font-size: 0.85rem; color: var(--text-muted);">Signed in as</div>' +
+          '<div style="font-weight: 600;">' + escapeHtml(state.auth.user.email) + '</div>' +
+        '</div>' +
+        '<div style="margin-bottom: 12px;">' +
+          '<div style="font-size: 0.85rem; color: var(--text-muted);">Plan</div>' +
+          '<div style="font-weight: 600;">' + tierLabel + '</div>' +
+        '</div>' +
+        '<div style="margin-bottom: 12px;">' +
+          '<div style="font-size: 0.85rem; color: var(--text-muted);">Daily Quota</div>' +
+          '<div style="font-weight: 600;">' + quotaInfo + '</div>' +
+        '</div>';
+      showModal('Account', bodyHtml, [
+        { label: 'Close', class: 'btn-secondary', action: hideModal },
+        { label: 'Sign Out', class: 'btn-danger', action: function () { hideModal(); handleLogout(); } }
+      ]);
+    } else {
+      showAuthForm('login');
+    }
+  }
+
+  function showAuthForm(mode) {
+    var isLogin = mode === 'login';
+    var title = isLogin ? 'Sign In' : 'Create Account';
+    var toggleText = isLogin
+      ? 'Don\'t have an account? <a href="#" id="auth-toggle-link">Sign up</a>'
+      : 'Already have an account? <a href="#" id="auth-toggle-link">Sign in</a>';
+
+    var bodyHtml =
+      '<div id="auth-error" class="auth-error hidden" style="margin-bottom: 12px;"></div>' +
+      '<label>Email</label>' +
+      '<input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email">' +
+      '<label>Password</label>' +
+      '<input type="password" id="auth-password" placeholder="Your password" autocomplete="' + (isLogin ? 'current-password' : 'new-password') + '">' +
+      '<div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-muted);">' + toggleText + '</div>';
+
+    showModal(title, bodyHtml, [
+      { label: 'Cancel', class: 'btn-secondary', action: hideModal },
+      { label: isLogin ? 'Sign In' : 'Sign Up', class: 'btn-primary', action: isLogin ? handleLogin : handleSignup }
+    ]);
+
+    // Bind toggle link
+    setTimeout(function () {
+      var link = $('#auth-toggle-link');
+      if (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          hideModal();
+          showAuthForm(isLogin ? 'signup' : 'login');
+        });
+      }
+      // Focus email field
+      var emailInput = $('#auth-email');
+      if (emailInput) emailInput.focus();
+    }, 50);
+  }
+
+  async function handleLogin() {
+    var email = ($('#auth-email') || {}).value;
+    var password = ($('#auth-password') || {}).value;
+    if (!email || !password) {
+      showAuthError('Please enter email and password.');
+      return;
+    }
+    showAuthError(''); // clear
+    try {
+      var result = await _supabase.auth.signInWithPassword({ email: email, password: password });
+      if (result.error) {
+        showAuthError(result.error.message);
+        return;
+      }
+      state.auth.user = { id: result.data.user.id, email: result.data.user.email };
+      hideModal();
+      showToast('Signed in as ' + state.auth.user.email, 'success');
+      syncMe().then(function () {
+        updateAuthUI();
+        updateQuotaDisplay();
+        renderDebugPanel();
+      });
+      updateAuthUI();
+    } catch (e) {
+      showAuthError('Login failed: ' + e.message);
+    }
+  }
+
+  async function handleSignup() {
+    var email = ($('#auth-email') || {}).value;
+    var password = ($('#auth-password') || {}).value;
+    if (!email || !password) {
+      showAuthError('Please enter email and password.');
+      return;
+    }
+    if (password.length < 6) {
+      showAuthError('Password must be at least 6 characters.');
+      return;
+    }
+    showAuthError(''); // clear
+    try {
+      var result = await _supabase.auth.signUp({ email: email, password: password });
+      if (result.error) {
+        showAuthError(result.error.message);
+        return;
+      }
+      // Check if email confirmation is required
+      if (result.data.user && !result.data.session) {
+        hideModal();
+        showToast('Check your email to confirm your account.', 'info');
+      } else if (result.data.session) {
+        state.auth.user = { id: result.data.user.id, email: result.data.user.email };
+        hideModal();
+        showToast('Account created! Signed in as ' + state.auth.user.email, 'success');
+        syncMe().then(function () {
+          updateAuthUI();
+          updateQuotaDisplay();
+          renderDebugPanel();
+        });
+        updateAuthUI();
+      }
+    } catch (e) {
+      showAuthError('Signup failed: ' + e.message);
+    }
+  }
+
+  async function handleLogout() {
+    if (!_supabase) return;
+    try {
+      await _supabase.auth.signOut();
+    } catch (e) {
+      debugLog('Sign out error:', e);
+    }
+    state.auth = { user: null, tier: 'free', dailyQuota: 10, usedToday: 0, dayISO: null, lastSync: null };
+    updateAuthUI();
+    updateQuotaDisplay();
+    renderDebugPanel();
+    showToast('Signed out', 'info');
+  }
+
+  function showAuthError(msg) {
+    var el = $('#auth-error');
+    if (!el) return;
+    if (!msg) {
+      el.classList.add('hidden');
+      el.textContent = '';
+    } else {
+      el.classList.remove('hidden');
+      el.textContent = msg;
+    }
+  }
+
+  function updateAuthUI() {
+    var btn = $('#account-btn');
+    if (!btn) return;
+    if (state.auth.user) {
+      btn.classList.add('authenticated');
+    } else {
+      btn.classList.remove('authenticated');
+    }
+  }
+
+  function updateQuotaDisplay() {
+    var el = $('#quota-display');
+    if (!el) return;
+    if (state.auth.user) {
+      el.classList.remove('hidden');
+      var usedEl = $('#quota-used');
+      var limitEl = $('#quota-limit');
+      if (usedEl) usedEl.textContent = state.auth.usedToday;
+      if (limitEl) limitEl.textContent = state.auth.dailyQuota;
+    } else {
+      el.classList.add('hidden');
+    }
+  }
+
   // ========== UTILITIES ==========
   function shuffleArray(arr) {
     for (var i = arr.length - 1; i > 0; i--) {
@@ -1719,6 +1995,10 @@
 
   // ========== EVENT BINDINGS ==========
   function bindEvents() {
+    // Account
+    var accountBtn = $('#account-btn');
+    if (accountBtn) accountBtn.addEventListener('click', showAccountModal);
+
     // Theme toggle
     $('#theme-toggle').addEventListener('click', toggleTheme);
     $('#theme-switch').addEventListener('change', toggleTheme);

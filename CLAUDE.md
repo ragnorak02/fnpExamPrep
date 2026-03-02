@@ -189,12 +189,12 @@ Exit: Server enforces quota reliably.
 
 ## 🔵 PHASE 4 — Auth Integration (Client)
 
-- [ ] Add Supabase JS client
-- [ ] Add Login UI
-- [ ] Add Logout
-- [ ] On startup call /me
-- [ ] Store remote tier in state
-- [ ] Display remaining quota
+- [x] Add Supabase JS client
+- [x] Add Login UI
+- [x] Add Logout
+- [x] On startup call /me
+- [x] Store remote tier in state
+- [x] Display remaining quota
 
 Exit: User login works and quota displays.
 
