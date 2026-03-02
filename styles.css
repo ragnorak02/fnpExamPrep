@@ -189,6 +189,22 @@ body {
   font-weight: 700;
 }
 
+.quota-display.quota-exhausted {
+  background: var(--incorrect-bg);
+  border: 1px solid var(--incorrect);
+}
+
+.quota-display.quota-warning {
+  background: rgba(255,167,38,0.12);
+  border: 1px solid var(--warning);
+}
+
+.quota-exhausted-msg {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+}
+
 /* ========== TAB BAR ========== */
 #tab-bar {
   display: flex;

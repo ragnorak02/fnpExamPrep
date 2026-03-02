@@ -155,6 +155,21 @@
     return true;
   }
 
+  async function incrementUsage(delta) {
+    var result = await apiFetch('usage-increment', {
+      method: 'POST',
+      body: JSON.stringify({ delta: delta || 1 })
+    });
+    if (result.error) {
+      debugLog('incrementUsage error:', result.error);
+      return { error: result.error };
+    }
+    state.auth.usedToday = result.data.usedToday;
+    state.auth.dailyQuota = result.data.dailyQuota;
+    updateQuotaDisplay();
+    return { data: result.data };
+  }
+
   // ========== DOM REFERENCES ==========
   var $  = function (sel) { return document.querySelector(sel); };
   var $$ = function (sel) { return document.querySelectorAll(sel); };
@@ -466,7 +481,7 @@
     return Object.keys(topicSet).sort();
   }
 
-  function startSession() {
+  async function startSession() {
     var mode = getSelectedMode();
     var topicFilter = null;
 
@@ -483,6 +498,32 @@
     }
 
     var count = state.settings.questionsPerDay;
+
+    // Quota gate for authenticated users
+    if (state.auth.user) {
+      var startBtn = $('#start-session-btn');
+      startBtn.disabled = true;
+      startBtn.textContent = 'Checking quota\u2026';
+
+      var synced = await syncMe();
+      var remaining = state.auth.dailyQuota - state.auth.usedToday;
+
+      if (remaining <= 0) {
+        startBtn.disabled = true;
+        startBtn.textContent = 'Daily Limit Reached';
+        updateQuotaDisplay();
+        return;
+      }
+      if (count > remaining) count = remaining;
+
+      startBtn.disabled = false;
+      startBtn.textContent = 'Start Session';
+
+      if (!synced) {
+        showToast('Could not verify quota. Session may be limited.', 'info');
+      }
+    }
+
     var questions = selectQuestions(mode, topicFilter, count);
 
     if (questions.length === 0) {
@@ -832,7 +873,7 @@
     $('#submit-btn').disabled = false;
   }
 
-  function submitAnswer() {
+  async function submitAnswer() {
     if (state.selectedChoice === null) return;
 
     var s = state.session;
@@ -844,6 +885,24 @@
     // Guard: prevent double-count
     var entry = daily.answersById[qid];
     if (entry && entry.isSubmitted) return;
+
+    // Per-answer quota enforcement for authenticated users
+    if (state.auth.user) {
+      var submitBtn = $('#submit-btn');
+      submitBtn.disabled = true;
+
+      var usageResult = await incrementUsage(1);
+
+      if (usageResult.data && usageResult.data.allowed === false) {
+        submitBtn.disabled = false;
+        showQuotaExhaustedModal();
+        return;
+      }
+      if (usageResult.error) {
+        debugLog('Usage increment failed, continuing locally');
+        showToast('Could not record answer on server.', 'info');
+      }
+    }
 
     var isCorrect = chosen === q.answer;
 
@@ -1000,6 +1059,52 @@
     }
   }
 
+  function endSessionTruncated() {
+    var s = state.session;
+    if (!s) { backToStart(); return; }
+    var daily = state.daily;
+
+    // Count only submitted answers
+    var submitted = [];
+    s.questions.forEach(function (q) {
+      var a = daily.answersById[q.id];
+      if (a && a.isSubmitted) submitted.push({ q: q, a: a });
+    });
+
+    if (submitted.length === 0) {
+      backToStart();
+      return;
+    }
+
+    var correct = 0;
+    submitted.forEach(function (item) { if (item.a.isCorrect) correct++; });
+    var total = submitted.length;
+    var pct = Math.round((correct / total) * 100);
+
+    daily.completedAtISO = new Date().toISOString();
+    save('fnp:daily', daily);
+
+    $('#practice-session').classList.add('hidden');
+    $('#practice-summary').classList.remove('hidden');
+
+    var scoreEl = $('#summary-score');
+    scoreEl.textContent = pct + '%';
+    scoreEl.style.color = pct >= 80 ? 'var(--correct)' : pct >= 60 ? 'var(--warning)' : 'var(--incorrect)';
+    $('#summary-quote').textContent = 'Daily limit reached \u2014 great effort today!';
+
+    var statsHtml =
+      '<div class="summary-stat"><div class="stat-value">' + total + '</div><div class="stat-label">Questions</div></div>' +
+      '<div class="summary-stat"><div class="stat-value correct-color">' + correct + '</div><div class="stat-label">Correct</div></div>' +
+      '<div class="summary-stat"><div class="stat-value incorrect-color">' + (total - correct) + '</div><div class="stat-label">Incorrect</div></div>' +
+      '<div class="summary-stat"><div class="stat-value">' + pct + '%</div><div class="stat-label">Accuracy</div></div>';
+    $('#summary-stats').innerHTML = statsHtml;
+
+    var missedBtn = $('#review-missed-btn');
+    if (missedBtn) missedBtn.classList.add('hidden');
+
+    state.session = null;
+  }
+
   function reviewMissed() {
     var s = state.session;
     if (!s) return;
@@ -1048,6 +1153,10 @@
     $('#practice-summary').classList.add('hidden');
     $('#practice-start').classList.remove('hidden');
     $('#resume-session-btn').classList.add('hidden');
+
+    if (state.auth.user) {
+      syncMe().then(function () { updateQuotaDisplay(); });
+    }
   }
 
   function showResumeIfNeeded() {
@@ -1786,6 +1895,17 @@
     }
   }
 
+  function showQuotaExhaustedModal() {
+    showModal('Daily Limit Reached',
+      '<p>You\'ve reached your daily question limit.</p>' +
+      '<p style="color: var(--text-muted); font-size: 0.9rem;">Your progress has been saved. Come back tomorrow!</p>',
+      [{ label: 'OK', class: 'btn-primary', action: function () {
+        hideModal();
+        endSessionTruncated();
+      }}]
+    );
+  }
+
   // ========== AUTH UI ==========
   function showAccountModal() {
     if (!_supabase) {
@@ -1965,8 +2085,32 @@
       var limitEl = $('#quota-limit');
       if (usedEl) usedEl.textContent = state.auth.usedToday;
       if (limitEl) limitEl.textContent = state.auth.dailyQuota;
+
+      var remaining = state.auth.dailyQuota - state.auth.usedToday;
+      var startBtn = $('#start-session-btn');
+
+      el.classList.remove('quota-exhausted', 'quota-warning');
+      if (remaining <= 0) {
+        el.classList.add('quota-exhausted');
+        if (startBtn) {
+          startBtn.disabled = true;
+          startBtn.textContent = 'Daily Limit Reached';
+        }
+      } else if (remaining <= 2) {
+        el.classList.add('quota-warning');
+        if (startBtn) {
+          startBtn.disabled = false;
+          startBtn.textContent = 'Start Session';
+        }
+      } else {
+        if (startBtn) {
+          startBtn.disabled = false;
+          startBtn.textContent = 'Start Session';
+        }
+      }
     } else {
       el.classList.add('hidden');
+      el.classList.remove('quota-exhausted', 'quota-warning');
     }
   }
 
